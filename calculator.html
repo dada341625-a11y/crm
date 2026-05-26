@@ -36,7 +36,7 @@ body{
   min-height:100vh;
   padding-bottom:60px;
 }
-
+ 
 /* Background mesh */
 body::before{
   content:'';
@@ -46,9 +46,9 @@ body::before{
     radial-gradient(ellipse 500px 300px at 80% 80%, rgba(34,211,165,.05) 0%, transparent 70%);
   pointer-events:none;z-index:0;
 }
-
+ 
 .wrap{max-width:720px;margin:0 auto;padding:28px 16px;position:relative;z-index:1}
-
+ 
 /* HEADER */
 .hero{text-align:center;padding:10px 0 30px}
 .hero-badge{
@@ -67,17 +67,17 @@ body::before{
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
 .hero-sub{font-size:13px;color:var(--text2)}
-
+ 
 /* TABS */
 .tabs{display:flex;background:var(--card);border-radius:12px;padding:5px;gap:4px;margin-bottom:16px;border:1px solid var(--border)}
 .tab{flex:1;padding:9px 6px;border-radius:9px;border:none;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;font-family:'Inter',sans-serif}
 .tab.act{background:var(--accent);color:#fff}
 .tab:hover:not(.act){background:var(--bg3);color:var(--text)}
-
+ 
 /* SECTION */
 .section{display:none}
 .section.act{display:block}
-
+ 
 /* CARD */
 .card{background:var(--card);border-radius:var(--r);padding:18px 20px;margin-bottom:12px;border:1px solid var(--border)}
 .card-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
@@ -89,7 +89,7 @@ body::before{
 }
 .card-title{font-size:13px;font-weight:600;color:var(--text2);letter-spacing:.02em}
 .card-title b{color:var(--text)}
-
+ 
 /* UPLOAD ZONE */
 .upload-zone{
   border:2px dashed var(--border2);border-radius:12px;padding:26px 20px;
@@ -116,7 +116,7 @@ body::before{
 .ai-field:last-child{border-bottom:none}
 .ai-field-name{color:var(--text2)}
 .ai-field-val{color:var(--text);font-weight:500;text-align:right;max-width:58%}
-
+ 
 /* FORM CONTROLS */
 select,input[type=text],textarea{
   width:100%;background:var(--bg3);color:var(--text);
@@ -131,7 +131,7 @@ select{
 }
 select:focus,input[type=text]:focus,textarea:focus{border-color:var(--accent)}
 textarea{resize:vertical;min-height:70px}
-
+ 
 /* CHIPS */
 .chips{display:flex;flex-wrap:wrap;gap:7px}
 .chip{
@@ -142,7 +142,7 @@ textarea{resize:vertical;min-height:70px}
 .chip:hover{border-color:var(--accent);color:var(--accent3)}
 .chip.sel{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
 .chip.sel2{background:rgba(34,211,165,.15);border-color:var(--green);color:var(--green);font-weight:600}
-
+ 
 /* RANGE */
 .slider-wrap{margin-top:6px}
 input[type=range]{
@@ -156,7 +156,7 @@ input[type=range]::-webkit-slider-thumb{
 input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow:0 0 0 2px rgba(34,211,165,.3)}
 .range-labels{display:flex;justify-content:space-between;font-size:10px;color:#55557a;margin-top:4px}
 .range-val{font-size:22px;font-weight:700;color:var(--accent3)}
-
+ 
 /* RESULTS */
 .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .res-card{background:var(--card2);border-radius:var(--r);padding:18px;border:1px solid var(--border);text-align:center}
@@ -165,7 +165,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
 .res-card.market .res-price{color:var(--accent3)}
 .res-card.yours .res-price{color:var(--green)}
 .res-sub{font-size:11px;color:#66668a;margin-top:4px}
-
+ 
 .breakdown{background:var(--card2);border-radius:var(--r);padding:16px 18px;margin-bottom:12px;border:1px solid var(--border)}
 .bd-title{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
 .bd-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}
@@ -175,14 +175,14 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
 .bd-val.up{color:var(--green)}
 .bd-val.dn{color:var(--red)}
 .bd-val.neu{color:var(--accent3)}
-
+ 
 .income-card{background:var(--card2);border-radius:var(--r);padding:16px 18px;margin-bottom:12px;border:1px solid var(--border)}
 .income-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .inc-cell{text-align:center;background:var(--bg3);border-radius:10px;padding:12px 6px;border:1px solid var(--border)}
 .inc-orders{font-size:10px;color:var(--text2);margin-bottom:5px}
 .inc-val{font-size:16px;font-weight:700;color:var(--green);font-family:'Syne',sans-serif}
 .inc-note{text-align:center;font-size:10px;color:#44446a;margin-top:8px}
-
+ 
 /* PRICE TABLE */
 .price-table{width:100%;border-collapse:collapse;font-size:12px}
 .price-table th{
@@ -204,14 +204,14 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
 .badge-med{background:rgba(244,63,94,.12);color:#fb7185}
 .badge-it{background:rgba(245,158,11,.12);color:var(--yellow)}
 .badge-extra{background:rgba(108,99,255,.15);color:var(--accent3)}
-
+ 
 /* COMPARE TAB */
 .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .comp-card{background:var(--card2);border-radius:var(--r);padding:16px;border:1px solid var(--border)}
 .comp-head{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
 .comp-item{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
 .comp-item:last-child{border-bottom:none}
-
+ 
 /* TIPS */
 .tip-card{background:var(--card2);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;border:1px solid var(--border)}
 .tip-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
@@ -219,7 +219,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
 .tip-title{font-size:13px;font-weight:700;color:var(--text)}
 .tip-body{font-size:13px;color:var(--text2);line-height:1.6}
 .tip-body li{margin-left:16px;margin-top:4px}
-
+ 
 /* BUTTONS */
 .btn-primary{
   width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));
@@ -237,16 +237,16 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
   display:inline-flex;align-items:center;gap:5px;
 }
 .btn-copy:hover{border-color:var(--accent);color:var(--accent3)}
-
+ 
 /* INVOICE */
 .invoice-box{background:var(--bg3);border-radius:12px;padding:18px;border:1px solid var(--border);margin-top:12px}
 .inv-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)}
 .inv-row:last-child{border-bottom:none;font-size:15px;font-weight:700;padding-top:10px;margin-top:4px}
 .inv-total .inv-row:last-child{color:var(--green)}
-
+ 
 /* DIVIDER */
 .divider{height:1px;background:var(--border);margin:6px 0 14px}
-
+ 
 /* EXTRAS */
 .extra-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
 .extra-chip{
@@ -266,7 +266,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
 .extra-label{font-size:12px;color:var(--text2);flex:1}
 .extra-chip.sel .extra-label{color:var(--text)}
 .extra-price{font-size:11px;color:var(--accent3);font-weight:600}
-
+ 
 /* URGENCY INDICATOR */
 .urg-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px}
 .urg-item{
@@ -279,7 +279,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
 .urg-item .urg-label{font-size:10px;color:var(--text2);line-height:1.3}
 .urg-item .urg-mult{font-size:12px;font-weight:700;color:var(--accent3);margin-top:2px}
 .urg-item.sel .urg-mult{color:var(--green)}
-
+ 
 /* MOBILE */
 @media(max-width:500px){
   .results-grid,.compare-grid{grid-template-columns:1fr}
@@ -287,19 +287,19 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
   .extra-grid{grid-template-columns:1fr}
   .urg-bar{grid-template-columns:1fr 1fr}
 }
-
+ 
 /* ANIMATIONS */
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .card,.results-grid,.income-card,.breakdown{animation:fadeIn .25s ease both}
-
+ 
 .price-change{animation:priceFlash .3s ease}
 @keyframes priceFlash{
   0%{transform:scale(1)}
   50%{transform:scale(1.06)}
   100%{transform:scale(1)}
 }
-
+ 
 /* RANGE TRACK FILL */
 .track-fill{position:relative}
 .track-fill input[type=range]{
@@ -309,23 +309,23 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
 </head>
 <body>
 <div class="wrap">
-
+ 
   <div class="hero">
     <div class="hero-badge"><i class="ti ti-calculator"></i> Калькулятор</div>
     <h1>Вартість студентських<br><span>робіт 2026</span></h1>
     <p class="hero-sub">Актуальні ціни · Всі типи робіт · Україна</p>
   </div>
-
+ 
   <div class="tabs" id="main-tabs">
     <button class="tab act" onclick="switchTab(0)"><i class="ti ti-calculator" style="font-size:14px"></i> Калькулятор</button>
     <button class="tab" onclick="switchTab(1)"><i class="ti ti-list" style="font-size:14px"></i> Прайс</button>
     <button class="tab" onclick="switchTab(2)"><i class="ti ti-file-invoice" style="font-size:14px"></i> Рахунок</button>
     <button class="tab" onclick="switchTab(3)"><i class="ti ti-bulb" style="font-size:14px"></i> Поради</button>
   </div>
-
+ 
   <!-- ======= CALCULATOR TAB ======= -->
   <div class="section act" id="tab-calc">
-
+ 
     <!-- AI UPLOAD -->
     <div class="card">
       <div class="card-head">
@@ -347,7 +347,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
       </div>
       <button class="btn-primary" id="apply-btn" disabled onclick="applyAiResult()" style="margin-top:10px">Застосувати до калькулятора</button>
     </div>
-
+ 
     <!-- TYPE -->
     <div class="card">
       <div class="card-head">
@@ -388,7 +388,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         </optgroup>
       </select>
     </div>
-
+ 
     <!-- KIND -->
     <div class="card">
       <div class="card-head">
@@ -397,7 +397,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
       </div>
       <div class="chips" id="kind-chips"></div>
     </div>
-
+ 
     <!-- SUBJECT -->
     <div class="card">
       <div class="card-head">
@@ -439,7 +439,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         </optgroup>
       </select>
     </div>
-
+ 
     <!-- PAGES (conditional) -->
     <div class="card" id="pages-card">
       <div class="card-head">
@@ -451,7 +451,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         <div class="range-labels"><span>5</span><span>50</span><span>100</span><span>150</span><span>200+</span></div>
       </div>
     </div>
-
+ 
     <!-- URGENCY (card with visual buttons) -->
     <div class="card">
       <div class="card-head">
@@ -460,7 +460,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
       </div>
       <div class="urg-bar" id="urg-bar"></div>
     </div>
-
+ 
     <!-- UNIQUENESS -->
     <div class="card" id="uniq-card">
       <div class="card-head">
@@ -476,7 +476,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         <option value="1.28">90%+ (максимальна, Unicheck)</option>
       </select>
     </div>
-
+ 
     <!-- EXTRAS -->
     <div class="card">
       <div class="card-head">
@@ -485,7 +485,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
       </div>
       <div class="extra-grid" id="extras-grid"></div>
     </div>
-
+ 
     <!-- DISCOUNT -->
     <div class="card">
       <div class="card-head">
@@ -497,7 +497,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         <div class="range-labels"><span>0%</span><span>-10%</span><span>-20%</span><span>-30%</span><span>-40%</span></div>
       </div>
     </div>
-
+ 
     <!-- RESULTS -->
     <div class="results-grid">
       <div class="res-card market">
@@ -511,7 +511,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         <div class="res-sub" id="your-sub">без знижки</div>
       </div>
     </div>
-
+ 
     <div class="breakdown">
       <div class="bd-title">Розбивка ціни</div>
       <div class="bd-row"><span class="bd-name">Базова ціна роботи</span><span class="bd-val neu" id="bd-base">—</span></div>
@@ -525,7 +525,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         <span class="bd-name" style="color:var(--text)">Разом</span><span class="bd-val" style="color:var(--green);font-size:15px" id="bd-total">—</span>
       </div>
     </div>
-
+ 
     <div class="income-card">
       <div class="bd-title" style="margin-bottom:10px">Прогноз доходу за місяць</div>
       <div class="income-grid">
@@ -536,15 +536,76 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
       </div>
       <div class="inc-note">* орієнтовно, без врахування витрат і виконавців</div>
     </div>
-
-    <div style="display:flex;gap:8px;margin-top:4px">
+ 
+    <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
       <button class="btn-copy" onclick="copyResult()"><i class="ti ti-copy"></i> Копіювати ціну</button>
-      <button class="btn-copy" onclick="goInvoice()"><i class="ti ti-file-invoice"></i> Сформувати рахунок</button>
+      <button class="btn-copy" onclick="openQuickInvoice()" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;border:none"><i class="ti ti-send"></i> 📨 Рахунок клієнту</button>
       <button class="btn-copy" id="share-btn" onclick="shareCalc()"><i class="ti ti-share"></i> Поділитись</button>
     </div>
-
+ 
+    <!-- QUICK INVOICE POPUP -->
+    <div id="qi-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center;padding:16px" onclick="if(event.target===this)closeQuickInvoice()">
+      <div style="background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:22px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#fff">📨 Рахунок для клієнта</div>
+          <button onclick="closeQuickInvoice()" style="background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px">✕</button>
+        </div>
+ 
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+          <div>
+            <div class="card-title" style="margin-bottom:5px;font-size:11px">Ім'я клієнта</div>
+            <input type="text" id="qi-buyer" placeholder="Андрій / Марія..." oninput="buildQuickInvoice()" style="font-size:13px">
+          </div>
+          <div>
+            <div class="card-title" style="margin-bottom:5px;font-size:11px">№ замовлення</div>
+            <input type="text" id="qi-order" placeholder="101" oninput="buildQuickInvoice()" style="font-size:13px">
+          </div>
+        </div>
+ 
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+          <div>
+            <div class="card-title" style="margin-bottom:5px;font-size:11px">Передоплата</div>
+            <select id="qi-prepay" onchange="buildQuickInvoice()" style="font-size:13px">
+              <option value="0">Без передоплати</option>
+              <option value="30">30%</option>
+              <option value="50" selected>50%</option>
+              <option value="100">100% (повна)</option>
+            </select>
+          </div>
+          <div>
+            <div class="card-title" style="margin-bottom:5px;font-size:11px">Спосіб оплати</div>
+            <select id="qi-method" onchange="buildQuickInvoice()" style="font-size:13px">
+              <option value="iban">🏦 IBAN (ФОП)</option>
+              <option value="mono">💳 Monobank</option>
+              <option value="privat">💳 Приватбанк</option>
+              <option value="link">🔗 Посилання</option>
+            </select>
+          </div>
+        </div>
+ 
+        <div id="qi-link-row" style="display:none;margin-bottom:12px">
+          <div class="card-title" style="margin-bottom:5px;font-size:11px">Посилання для оплати</div>
+          <input type="text" id="qi-paylink" placeholder="https://send.monobank.ua/..." oninput="buildQuickInvoice()" style="font-size:13px">
+        </div>
+ 
+        <div style="margin-bottom:12px">
+          <div class="card-title" style="margin-bottom:5px;font-size:11px">Дедлайн виконання</div>
+          <input type="text" id="qi-deadline" placeholder="напр. 15 червня / 7 днів" oninput="buildQuickInvoice()" style="font-size:13px">
+        </div>
+ 
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
+          <div style="font-size:10px;font-weight:700;color:var(--accent3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Попередній перегляд</div>
+          <pre id="qi-preview" style="font-family:'Inter',sans-serif;font-size:12px;color:var(--text);white-space:pre-wrap;line-height:1.6;margin:0"></pre>
+        </div>
+ 
+        <button onclick="copyQuickInvoice()" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),var(--green2));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">
+          <i class="ti ti-copy"></i> Скопіювати і надіслати клієнту
+        </button>
+      </div>
+    </div>
+ 
   </div><!-- /tab-calc -->
-
+ 
   <!-- ======= PRICE LIST TAB ======= -->
   <div class="section" id="tab-price">
     <div class="card">
@@ -553,7 +614,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         <div class="card-title"><b>Повний прайс-лист 2026</b> — орієнтовні ринкові ціни по Україні</div>
       </div>
     </div>
-
+ 
     <div class="card" style="padding:0;overflow:hidden">
       <table class="price-table">
         <thead>
@@ -562,7 +623,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         <tbody id="price-tbody"></tbody>
       </table>
     </div>
-
+ 
     <div class="card" style="margin-top:4px">
       <div class="bd-title">Коефіцієнти терміновості</div>
       <div class="bd-row"><span class="bd-name">2+ тижні</span><span class="bd-val" style="color:var(--green)">×0.85 (знижка)</span></div>
@@ -571,7 +632,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
       <div class="bd-row"><span class="bd-name">1–2 дні</span><span class="bd-val" style="color:var(--red)">×1.55</span></div>
       <div class="bd-row"><span class="bd-name">До 12 годин</span><span class="bd-val" style="color:var(--red)">×2.00 (!)</span></div>
     </div>
-
+ 
     <div class="card">
       <div class="bd-title">Коефіцієнти унікальності</div>
       <div class="bd-row"><span class="bd-name">Без вимог</span><span class="bd-val neu">×1.00</span></div>
@@ -582,12 +643,12 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
       <div class="bd-row"><span class="bd-name">90%+ (Unicheck)</span><span class="bd-val" style="color:var(--red)">×1.28</span></div>
     </div>
   </div>
-
+ 
   <!-- ======= INVOICE TAB ======= -->
   <div class="section" id="tab-invoice">
     <div class="card">
       <div class="card-head"><i class="ti ti-file-invoice" style="color:var(--accent3)"></i><div class="card-title"><b>Формування рахунку для клієнта</b></div></div>
-
+ 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
         <div>
           <div class="card-title" style="margin-bottom:6px">Одержувач</div>
@@ -598,12 +659,12 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
           <input type="text" id="inv-buyer" placeholder="Петро Мельниченко">
         </div>
       </div>
-
+ 
       <div style="margin-bottom:10px">
         <div class="card-title" style="margin-bottom:6px">Опис послуги</div>
         <textarea id="inv-desc" placeholder="Курсова робота з економіки, 30 стор., 70% унікальність, термін 7 днів"></textarea>
       </div>
-
+ 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
         <div>
           <div class="card-title" style="margin-bottom:6px">Сума (грн)</div>
@@ -619,7 +680,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
           </select>
         </div>
       </div>
-
+ 
       <div style="margin-bottom:10px">
         <div class="card-title" style="margin-bottom:6px">Спосіб оплати</div>
         <div class="chips">
@@ -627,7 +688,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
           <button class="chip" onclick="selPayment(this,'link')">🔗 Платіжне посилання</button>
         </div>
       </div>
-
+ 
       <!-- FOP IBAN block -->
       <div id="fop-iban-block" style="margin-bottom:10px;background:var(--bg3);border:1px solid rgba(108,99,255,.3);border-radius:12px;padding:14px">
         <div style="font-size:10px;font-weight:700;color:var(--accent3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">📋 Реквізити для оплати</div>
@@ -638,7 +699,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         <div class="inv-row"><span style="color:var(--text2)">Банк:</span><span>АТ «УНІВЕРСАЛ БАНК»</span></div>
         <div class="inv-row" style="border-bottom:none"><span style="color:var(--text2)">Призначення:</span><span style="text-align:right;max-width:55%;font-size:12px;color:var(--green)">Оплата за інформаційно-консультаційні послуги сервісу "Kursio" згідно замовлення №<span id="inv-order-num-preview" style="color:var(--yellow)">___</span></span></div>
       </div>
-
+ 
       <!-- Payment link block -->
       <div id="fop-link-block" style="display:none;margin-bottom:10px;background:var(--bg3);border:1px solid rgba(34,211,165,.3);border-radius:12px;padding:14px">
         <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">🔗 Платіжне посилання</div>
@@ -648,15 +709,15 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         </div>
         <div style="font-size:11px;color:var(--text2)">Клієнт перейде за посиланням та сплатить онлайн</div>
       </div>
-
+ 
       <div style="margin-bottom:10px">
         <div class="card-title" style="margin-bottom:6px">Номер замовлення</div>
         <input type="text" id="inv-order" placeholder="Наприклад: 2847" oninput="updateOrderPreview(this.value)">
       </div>
-
+ 
       <button class="btn-primary btn-green" onclick="generateInvoice()">Сформувати рахунок</button>
     </div>
-
+ 
     <div id="invoice-output" style="display:none">
       <div class="invoice-box">
         <div style="text-align:center;margin-bottom:14px">
@@ -671,10 +732,10 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
       </div>
     </div>
   </div>
-
+ 
   <!-- ======= TIPS TAB ======= -->
   <div class="section" id="tab-tips">
-
+ 
     <div class="tip-card">
       <div class="tip-head"><span class="tip-icon"><i class="ti ti-trending-up"></i></span><div class="tip-title">Як правильно встановити ціну</div></div>
       <div class="tip-body">
@@ -687,7 +748,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         </ul>
       </div>
     </div>
-
+ 
     <div class="tip-card">
       <div class="tip-head"><span class="tip-icon"><i class="ti ti-shield-check"></i></span><div class="tip-title">Передоплата та захист</div></div>
       <div class="tip-body">
@@ -699,7 +760,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         </ul>
       </div>
     </div>
-
+ 
     <div class="tip-card">
       <div class="tip-head"><span class="tip-icon"><i class="ti ti-clock"></i></span><div class="tip-title">Терміновість: золоте правило</div></div>
       <div class="tip-body">
@@ -711,7 +772,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         </ul>
       </div>
     </div>
-
+ 
     <div class="tip-card">
       <div class="tip-head"><span class="tip-icon"><i class="ti ti-users"></i></span><div class="tip-title">Де шукати замовників у 2026</div></div>
       <div class="tip-body">
@@ -724,7 +785,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         </ul>
       </div>
     </div>
-
+ 
     <div class="tip-card">
       <div class="tip-head"><span class="tip-icon"><i class="ti ti-robot"></i></span><div class="tip-title">ШІ-інструменти для виконавців</div></div>
       <div class="tip-body">
@@ -737,7 +798,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         </ul>
       </div>
     </div>
-
+ 
     <div class="tip-card">
       <div class="tip-head"><span class="tip-icon" style="color:var(--yellow)"><i class="ti ti-alert-triangle"></i></span><div class="tip-title">Топ помилок виконавців</div></div>
       <div class="tip-body">
@@ -750,15 +811,15 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
         </ul>
       </div>
     </div>
-
+ 
   </div>
-
+ 
 </div><!-- /wrap -->
-
+ 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
+ 
 // ─── DATA ───────────────────────────────────────────────
 const BASE={
   ese:450, ref:650, kontr:750, kurs:1900, bak:4200, dipl:5500, mag:7500, dis:22000,
@@ -775,7 +836,7 @@ const BASE_PG={
 // per-page unit for types that are priced per page
 const PER_PAGE={perev:85, edit:35};
 const NO_PAGES=['code','db','site','app','test'];
-
+ 
 const KINDS=[
   {label:'Теоретична',mult:1.00},
   {label:'З практичною частиною',mult:1.18},
@@ -784,14 +845,14 @@ const KINDS=[
   {label:'Теорія + практика',mult:1.12},
   {label:'Мultimedia / Дизайн',mult:1.30},
 ];
-
+ 
 const URGENCIES=[
   {label:'3+ тижні',ico:'🕰️',mult:0.85,desc:'−15%'},
   {label:'1–2 тижні',ico:'📅',mult:1.00,desc:'стандарт'},
   {label:'3–5 днів',ico:'⚡',mult:1.25,desc:'+25%'},
   {label:'1–2 дні',ico:'🔥',mult:1.55,desc:'+55%'},
 ];
-
+ 
 const EXTRAS=[
   {id:'slides',label:'Презентація (PPT)',price:500},
   {id:'speech',label:'Текст виступу / доповіді',price:350},
@@ -802,7 +863,7 @@ const EXTRAS=[
   {id:'corrections',label:'Правки після здачі (2 тижні)',price:250},
   {id:'express',label:'Пріоритетна підтримка',price:300},
 ];
-
+ 
 const PRICE_TABLE=[
   ['Есе',        '5–10 стор.', 450,  600,  800,  'hum'],
   ['Реферат',    '10–15 стор.',650,  900,  1200, 'hum'],
@@ -824,11 +885,11 @@ const PRICE_TABLE=[
   ['Бізнес-план','15–25 стор.',3800,5000, 7500, 'hum'],
   ['Презентація','10–20 слайд.',700, 1000, 1800,'hum'],
 ];
-
+ 
 // ─── STATE ──────────────────────────────────────────────
 let selKind=0, selUrg=1, selExtras=new Set();
 let aiData=null, paymentMethod='iban';
-
+ 
 // ─── INIT ────────────────────────────────────────────────
 function init(){
   makeKindChips();
@@ -839,7 +900,7 @@ function init(){
   updateRangeTrack('pages-track','pages-range');
   updateRangeTrack('disc-track','disc-range');
 }
-
+ 
 function makeKindChips(){
   const el=document.getElementById('kind-chips');
   el.innerHTML='';
@@ -851,7 +912,7 @@ function makeKindChips(){
     el.appendChild(b);
   });
 }
-
+ 
 function makeUrgBar(){
   const el=document.getElementById('urg-bar');
   el.innerHTML='';
@@ -863,7 +924,7 @@ function makeUrgBar(){
     el.appendChild(d);
   });
 }
-
+ 
 function makeExtrasGrid(){
   const el=document.getElementById('extras-grid');
   el.innerHTML='';
@@ -880,7 +941,7 @@ function makeExtrasGrid(){
     el.appendChild(d);
   });
 }
-
+ 
 function buildPriceTable(){
   const tb=document.getElementById('price-tbody');
   const badgeCls={hum:'badge-hum',it:'badge-it',med:'badge-med'};
@@ -893,7 +954,7 @@ function buildPriceTable(){
       <td class="price-cell">${fmt(p3)}</td>
     </tr>`).join('');
 }
-
+ 
 // ─── CALC ────────────────────────────────────────────────
 function calc(){
   const type=document.getElementById('sel-type').value;
@@ -903,11 +964,11 @@ function calc(){
   const disc=parseInt(document.getElementById('disc-range').value);
   const kindMult=KINDS[selKind].mult;
   const pages=parseInt(document.getElementById('pages-range').value);
-
+ 
   let basePrice=BASE[type]||1000;
   let pagesMult=1.0;
   let perPageNote='';
-
+ 
   // per-page types
   if(PER_PAGE[type]){
     basePrice=PER_PAGE[type]*pages;
@@ -917,19 +978,19 @@ function calc(){
     if(pages>bp) pagesMult=1+(pages-bp)*0.013;
     else if(pages<bp) pagesMult=Math.max(0.75,1-(bp-pages)*0.01);
   }
-
+ 
   let extrasTotal=0;
   selExtras.forEach(id=>{const ex=EXTRAS.find(e=>e.id===id);if(ex)extrasTotal+=ex.price});
-
+ 
   const market=Math.round(basePrice*kindMult*specMult*urgMult*uniqMult*pagesMult);
   const withExtras=market+extrasTotal;
   const your=Math.round(withExtras*(1-disc/100));
-
+ 
   // display
   animatePrice('market-price',fmt(market+(selExtras.size?extrasTotal:0)));
   animatePrice('your-price',fmt(your));
   document.getElementById('your-sub').textContent=disc>0?'знижка −'+disc+'%':'без знижки';
-
+ 
   // breakdown
   document.getElementById('bd-base').textContent=fmt(basePrice)+(perPageNote?' '+perPageNote:'');
   document.getElementById('bd-kind').textContent=kindMult===1?'—':'×'+kindMult.toFixed(2)+' = '+fmt(basePrice*kindMult);
@@ -939,14 +1000,14 @@ function calc(){
   document.getElementById('bd-pages').textContent=PER_PAGE[type]||NO_PAGES.includes(type)?'—':'×'+pagesMult.toFixed(2);
   document.getElementById('bd-extras').textContent=extrasTotal>0?'+'+fmt(extrasTotal)+' ('+selExtras.size+' посл.)':'—';
   document.getElementById('bd-total').textContent=fmt(your);
-
+ 
   // coloring
   setValColor('bd-urg',urgMult);
   setValColor('bd-uniq',uniqMult);
-
+ 
   // income
   [10,30,60,100].forEach(n=>document.getElementById('inc'+n).textContent=fmtK(your*n));
-
+ 
   // prefill invoice
   const descEl=document.getElementById('inv-desc');
   if(!descEl.value||descEl.dataset.auto){
@@ -956,7 +1017,7 @@ function calc(){
   }
   document.getElementById('inv-amount').value=your;
 }
-
+ 
 function setValColor(id,mult){
   const el=document.getElementById(id);
   if(!el)return;
@@ -965,12 +1026,12 @@ function setValColor(id,mult){
   else if(mult<1.0) el.className='bd-val up';
   else el.className='bd-val neu';
 }
-
+ 
 function animatePrice(id,val){
   const el=document.getElementById(id);
   if(el.textContent!==val){el.textContent=val;el.style.animation='none';requestAnimationFrame(()=>el.style.animation='priceFlash .3s ease')}
 }
-
+ 
 function onTypeChange(){
   const type=document.getElementById('sel-type').value;
   const pg=document.getElementById('pages-card');
@@ -987,21 +1048,21 @@ function onTypeChange(){
   }
   calc();
 }
-
+ 
 function onPagesChange(){
   const r=document.getElementById('pages-range');
   document.getElementById('pages-out').textContent=r.value;
   updateRangeTrack('pages-track','pages-range');
   calc();
 }
-
+ 
 function onDiscChange(){
   const r=document.getElementById('disc-range');
   document.getElementById('disc-out').textContent=r.value+'%';
   updateRangeTrack('disc-track','disc-range');
   calc();
 }
-
+ 
 function updateRangeTrack(wrapId,rangeId){
   const wrap=document.getElementById(wrapId);
   const range=document.getElementById(rangeId);
@@ -1009,11 +1070,11 @@ function updateRangeTrack(wrapId,rangeId){
   const pct=((range.value-range.min)/(range.max-range.min)*100).toFixed(1)+'%';
   wrap.style.setProperty('--fill',pct);
 }
-
+ 
 // ─── FORMAT ─────────────────────────────────────────────
 function fmt(n){return Math.round(n).toLocaleString('uk-UA')+'\u00a0грн'}
 function fmtK(n){const v=Math.round(n);return v>=1000?(v/1000).toFixed(v%1000===0?0:1)+'k\u00a0грн':v+'\u00a0грн'}
-
+ 
 // ─── TABS ────────────────────────────────────────────────
 function switchTab(i){
   document.querySelectorAll('.tab').forEach((t,j)=>t.className='tab'+(j===i?' act':''));
@@ -1021,7 +1082,7 @@ function switchTab(i){
     document.getElementById(id).className='section'+(j===i?' act':'');
   });
 }
-
+ 
 // ─── COPY / SHARE ────────────────────────────────────────
 function copyResult(){
   const t=document.getElementById('sel-type');
@@ -1036,20 +1097,20 @@ function copyResult(){
   txt+=`Ринкова ціна: ${mp}\n`;
   txt+=disc>0?`Ваша ціна (−${disc}%): ${yp}`:`Ціна: ${yp}`;
   if(selExtras.size){txt+=`\nДоп. послуги: ${[...selExtras].map(id=>EXTRAS.find(e=>e.id===id)?.label).join(', ')}`}
-  navigator.clipboard.writeText(txt).then(()=>alert('Скопійовано!')).catch(()=>{});
+  safeCopy(txt, 'Скопійовано!');
 }
-
+ 
 function shareCalc(){
   const url=window.location.href;
-  if(navigator.share){navigator.share({title:'Калькулятор студ. робіт',url})}
-  else{navigator.clipboard.writeText(url).then(()=>alert('Посилання скопійовано!'))}
+  if(navigator.share){navigator.share({title:'Калькулятор студ. робіт',url}).catch(()=>safeCopy(url,'Посилання скопійовано!'))}
+  else{safeCopy(url,'Посилання скопійовано!')}
 }
-
+ 
 function goInvoice(){
   switchTab(2);
   window.scrollTo({top:0,behavior:'smooth'});
 }
-
+ 
 // ─── INVOICE ────────────────────────────────────────────
 function selPayment(btn,method){
   paymentMethod=method;
@@ -1058,12 +1119,12 @@ function selPayment(btn,method){
   document.getElementById('fop-iban-block').style.display=(method==='iban')?'block':'none';
   document.getElementById('fop-link-block').style.display=(method==='link')?'block':'none';
 }
-
+ 
 function updateOrderPreview(val){
   const el=document.getElementById('inv-order-num-preview');
   if(el) el.textContent=val||'___';
 }
-
+ 
 function generateInvoice(){
   const seller=document.getElementById('inv-seller').value||'ФОП Десятерик Оксана Сергіївна';
   const buyer=document.getElementById('inv-buyer').value||'Замовник';
@@ -1078,9 +1139,9 @@ function generateInvoice(){
   const num='INV-'+Date.now().toString().slice(-6);
   const toPay=prepayPct===100?amount:(prepay||amount);
   const призначення=`Оплата за інформаційно-консультаційні послуги сервісу "Kursio" згідно замовлення №${orderNum}`;
-
+ 
   document.getElementById('inv-date-out').textContent=`№ ${num} від ${date}`;
-
+ 
   let rekvBody='';
   if(paymentMethod==='iban'){
     rekvBody=`
@@ -1100,7 +1161,7 @@ function generateInvoice(){
       <div class="inv-row" style="border-bottom:none"><span style="color:var(--text2)">Посилання:</span><span style="font-size:12px;color:var(--green);word-break:break-all;max-width:60%;text-align:right">${payLink}</span></div>
     </div>`;
   }
-
+ 
   document.getElementById('inv-body').innerHTML=`
     <div class="inv-row"><span>Одержувач:</span><span><b>${seller}</b></span></div>
     <div class="inv-row"><span>Замовник:</span><span><b>${buyer}</b></span></div>
@@ -1112,11 +1173,11 @@ function generateInvoice(){
     <div class="inv-row" style="border-top:2px solid var(--border2);margin-top:8px;padding-top:8px;font-size:16px;font-weight:800">
       <span>ДО СПЛАТИ:</span><span style="color:var(--green)">${fmt(toPay)}</span>
     </div>`;
-
+ 
   document.getElementById('invoice-output').style.display='block';
   document.getElementById('invoice-output').scrollIntoView({behavior:'smooth'});
 }
-
+ 
 function copyInvoice(){
   const seller=document.getElementById('inv-seller').value||'ФОП Десятерик Оксана Сергіївна';
   const buyer=document.getElementById('inv-buyer').value||'Замовник';
@@ -1130,7 +1191,7 @@ function copyInvoice(){
   const toPay=prepayPct===100?amount:(prepay||amount);
   const date=new Date().toLocaleDateString('uk-UA');
   const призначення=`Оплата за інформаційно-консультаційні послуги сервісу "Kursio" згідно замовлення №${orderNum}`;
-
+ 
   let t=`🧾 РАХУНОК НА ОПЛАТУ від ${date}\n`;
   t+=`─────────────────────────────\n`;
   t+=`Замовник: ${buyer}\n`;
@@ -1142,7 +1203,7 @@ function copyInvoice(){
     t+=`📌 Залишок після здачі: ${rest} грн\n`;
   }
   t+=`─────────────────────────────\n`;
-
+ 
   if(paymentMethod==='iban'){
     t+=`💳 РЕКВІЗИТИ ДЛЯ ОПЛАТИ:\n`;
     t+=`Одержувач: ФОП Десятерик Оксана Сергіївна\n`;
@@ -1155,15 +1216,15 @@ function copyInvoice(){
     t+=`🔗 ПОСИЛАННЯ ДЛЯ ОПЛАТИ:\n${payLink}\n`;
     t+=`Призначення: ${призначення}\n`;
   }
-
+ 
   t+=`─────────────────────────────\n`;
   t+=`✅ ДО СПЛАТИ: ${toPay} грн`;
-
-  navigator.clipboard.writeText(t).then(()=>alert('Рахунок скопійовано! Тепер можна надіслати клієнту.')).catch(()=>{});
+ 
+  safeCopy(t, 'Рахунок скопійовано! Тепер можна надіслати клієнту.');
 }
-
+ 
 function printInvoice(){window.print()}
-
+ 
 // ─── AI FILE UPLOAD ──────────────────────────────────────
 function setStatus(msg,cls){
   const el=document.getElementById('ai-status');
@@ -1219,10 +1280,10 @@ async function callAI(text){
 6. Практична частина / код / опитування (так/ні і що саме)
 7. Вимоги до оформлення (ДСТУ, ГОСТ, інше)
 8. Обов'язкові додаткові матеріали (презентація, доповідь тощо)
-
+ 
 Відповідай ТІЛЬКИ у форматі JSON без пояснень:
 {"type":"курсова","pages":"25-30","subject":"Економіка","uniqueness":"60%","deadline":"2 тижні","practical":"є практична з розрахунками","formatting":"ДСТУ 3008:2015","extras":"презентація PPT"}
-
+ 
 Текст методички:
 ${text}`;
   const resp=await fetch('https://api.anthropic.com/v1/messages',{
@@ -1283,7 +1344,112 @@ function applyAiResult(){
   calc();
   setStatus('<i class="ti ti-check" style="margin-right:6px"></i>Всі параметри застосовано!','done');
 }
-
+ 
+// ─── QUICK INVOICE POPUP ────────────────────────────────
+function openQuickInvoice(){
+  buildQuickInvoice();
+  const ov=document.getElementById('qi-overlay');
+  ov.style.display='flex';
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('qi-buyer').focus(),100);
+}
+function closeQuickInvoice(){
+  document.getElementById('qi-overlay').style.display='none';
+  document.body.style.overflow='';
+}
+function getQuickInvoiceText(){
+  const t=document.getElementById('sel-type');
+  const typeName=t.options[t.selectedIndex].text.replace(/\(.*\)/,'').trim();
+  const pages=document.getElementById('pages-range').value;
+  const your=document.getElementById('your-price').textContent;
+  const disc=parseInt(document.getElementById('disc-range').value);
+  const buyer=document.getElementById('qi-buyer').value||'Замовник';
+  const orderNum=document.getElementById('qi-order').value;
+  const prepayPct=parseInt(document.getElementById('qi-prepay').value);
+  const method=document.getElementById('qi-method').value;
+  const paylink=document.getElementById('qi-paylink').value;
+  const deadline=document.getElementById('qi-deadline').value;
+ 
+  const amount=parseFloat(document.getElementById('inv-amount').value)||0;
+  const prepay=Math.round(amount*prepayPct/100);
+  const rest=amount-prepay;
+  const date=new Date().toLocaleDateString('uk-UA');
+ 
+  // extras list
+  const extrasList=[...selExtras].map(id=>EXTRAS.find(e=>e.id===id)?.label).filter(Boolean);
+ 
+  let txt='';
+  txt+=`📋 Рахунок на оплату\n`;
+  txt+=`${date}${orderNum?' · № '+orderNum:''}\n`;
+  txt+=`━━━━━━━━━━━━━━━━━━━━━━\n`;
+  txt+=`👤 Клієнт: ${buyer}\n`;
+  txt+=`📝 Послуга: ${typeName}`;
+  const noP=NO_PAGES.includes(document.getElementById('sel-type').value);
+  if(!noP) txt+=`, ${pages} стор.`;
+  txt+='\n';
+  if(extrasList.length) txt+=`➕ Доп.: ${extrasList.join(', ')}\n`;
+  if(deadline) txt+=`⏰ Дедлайн: ${deadline}\n`;
+  if(disc>0) txt+=`🎁 Знижка: ${disc}%\n`;
+  txt+=`━━━━━━━━━━━━━━━━━━━━━━\n`;
+  txt+=`💰 Сума: ${your}\n`;
+  if(prepayPct>0 && prepayPct<100){
+    txt+=`📌 Передоплата ${prepayPct}%: ${prepay} грн\n`;
+    txt+=`📌 Залишок після здачі: ${rest} грн\n`;
+  } else if(prepayPct===100){
+    txt+=`📌 Повна оплата: ${amount} грн\n`;
+  }
+  txt+=`━━━━━━━━━━━━━━━━━━━━━━\n`;
+ 
+  if(method==='iban'){
+    txt+=`💳 Реквізити для оплати:\n`;
+    txt+=`Одержувач: ФОП Десятерик Оксана Сергіївна\n`;
+    txt+=`IBAN: UA543220010000026003360042551\n`;
+    txt+=`Банк: АТ «УНІВЕРСАЛ БАНК»\n`;
+    txt+=`Призначення: Оплата за послуги${orderNum?' замовлення №'+orderNum:''}\n`;
+  } else if(method==='mono'){
+    txt+=`💳 Оплата на Monobank:\n`;
+    txt+=`Картка: (вкажіть номер картки)\n`;
+  } else if(method==='privat'){
+    txt+=`💳 Оплата на Приватбанк:\n`;
+    txt+=`Картка: (вкажіть номер картки)\n`;
+  } else if(method==='link' && paylink){
+    txt+=`🔗 Посилання для оплати:\n${paylink}\n`;
+  }
+ 
+  const toPay=prepayPct===0?amount:(prepayPct===100?amount:prepay);
+  txt+=`━━━━━━━━━━━━━━━━━━━━━━\n`;
+  txt+=`✅ До сплати зараз: ${toPay} грн`;
+  return txt;
+}
+function buildQuickInvoice(){
+  const method=document.getElementById('qi-method').value;
+  document.getElementById('qi-link-row').style.display=method==='link'?'block':'none';
+  document.getElementById('qi-preview').textContent=getQuickInvoiceText();
+}
+function copyQuickInvoice(){
+  safeCopy(getQuickInvoiceText(),'✅ Рахунок скопійовано! Вставте в Telegram або Instagram.');
+}
+ 
+// ─── SAFE CLIPBOARD (iOS Safari compatible) ──────────────
+function safeCopy(text, successMsg){
+  successMsg = successMsg || 'Скопійовано!';
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(()=>alert(successMsg)).catch(()=>fallbackCopy(text, successMsg));
+  } else {
+    fallbackCopy(text, successMsg);
+  }
+}
+function fallbackCopy(text, msg){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); alert(msg || 'Скопійовано!'); }
+  catch(e) { alert('Не вдалося скопіювати. Скопіюйте вручну:\n' + text); }
+  document.body.removeChild(ta);
+}
+ 
 // ─── START ───────────────────────────────────────────────
 init();
 </script>
