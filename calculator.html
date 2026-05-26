@@ -540,6 +540,7 @@ input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow
     <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
       <button class="btn-copy" onclick="copyResult()"><i class="ti ti-copy"></i> Копіювати ціну</button>
       <button class="btn-copy" onclick="openQuickInvoice()" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;border:none"><i class="ti ti-send"></i> 📨 Рахунок клієнту</button>
+      <button class="btn-copy" onclick="sendToCRM()" style="background:linear-gradient(135deg,var(--green2),var(--green));color:#fff;font-weight:700;border:none"><i class="ti ti-plus"></i> ➕ Створити в CRM</button>
       <button class="btn-copy" id="share-btn" onclick="shareCalc()"><i class="ti ti-share"></i> Поділитись</button>
     </div>
  
@@ -1343,6 +1344,50 @@ function applyAiResult(){
   if(d.practical){const p=d.practical.toLowerCase();const chips=document.getElementById('kind-chips').querySelectorAll('.chip');chips.forEach(c=>c.className='chip');if(p.includes('код')||p.includes('програм')){selKind=2;chips[2].className='chip sel'}else if(p.includes('опитуван')||p.includes('анкет')){selKind=3;chips[3].className='chip sel'}else if(p.includes('є')||p.includes('розрахун')){selKind=1;chips[1].className='chip sel'}else{selKind=0;chips[0].className='chip sel'}}
   calc();
   setStatus('<i class="ti ti-check" style="margin-right:6px"></i>Всі параметри застосовано!','done');
+}
+ 
+// ─── SEND TO CRM ─────────────────────────────────────────
+function sendToCRM(){
+  const t=document.getElementById('sel-type');
+  const typeName=t.options[t.selectedIndex].text.replace(/\(.*\)/,'').trim();
+  const specEl=document.getElementById('sel-spec');
+  const specName=specEl.options[specEl.selectedIndex].text.replace(/──.*──/g,'').trim();
+  const uniqEl=document.getElementById('sel-uniq');
+  const uniqName=uniqEl.options[uniqEl.selectedIndex].text;
+  const pages=document.getElementById('pages-range').value;
+  const urgName=URGENCIES[selUrg].label;
+  const disc=parseInt(document.getElementById('disc-range').value);
+  const amount=parseFloat(document.getElementById('inv-amount').value)||0;
+  const extrasList=[...selExtras].map(id=>EXTRAS.find(e=>e.id===id)?.label).filter(Boolean);
+ 
+  const crmData={
+    fromCalc: true,
+    type: typeName,
+    subject: specName,
+    pages: pages,
+    urgency: selUrg>=3?'fire':selUrg===2?'hot':'normal',
+    total: amount,
+    desc: [
+      typeName+', '+pages+' стор.',
+      'Терміновість: '+urgName,
+      'Унікальність: '+uniqName,
+      extrasList.length?'Доп.: '+extrasList.join(', '):'',
+      disc>0?'Знижка: '+disc+'%':'',
+    ].filter(Boolean).join('\n'),
+  };
+ 
+  try{
+    localStorage.setItem('crm_from_calc', JSON.stringify(crmData));
+    // відкриваємо CRM — якщо файли поруч
+    const crmUrl = window.location.href.replace('calculator.html','').replace(/\/[^/]*$/, '/') + 'index.html';
+    window.open(crmUrl, '_blank');
+    // показуємо підтвердження
+    setTimeout(()=>{
+      alert('✅ Дані передано в CRM!\n\nВідкрийте вкладку CRM → перейдіть на "Нове замовлення" — форма вже заповнена.\n\nДодайте ім\'я клієнта і збережіть!');
+    }, 300);
+  } catch(e){
+    alert('Помилка: '+e.message);
+  }
 }
  
 // ─── QUICK INVOICE POPUP ────────────────────────────────
