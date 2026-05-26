@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Калькулятор студентських робіт 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
+<style>
+:root{
+  --bg:#0d0d14;
+  --bg2:#13131f;
+  --bg3:#1a1a2c;
+  --card:#1e1e30;
+  --card2:#232336;
+  --border:#2a2a44;
+  --border2:#353558;
+  --accent:#6c63ff;
+  --accent2:#8b5cf6;
+  --accent3:#a78bfa;
+  --green:#22d3a5;
+  --green2:#10b981;
+  --yellow:#f59e0b;
+  --red:#f43f5e;
+  --text:#e8e8f8;
+  --text2:#9999bb;
+  --text3:#5555779;
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding-bottom:60px;
+}
+
+/* Background mesh */
+body::before{
+  content:'';
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 10%, rgba(108,99,255,.07) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 300px at 80% 80%, rgba(34,211,165,.05) 0%, transparent 70%);
+  pointer-events:none;z-index:0;
+}
+
+.wrap{max-width:720px;margin:0 auto;padding:28px 16px;position:relative;z-index:1}
+
+/* HEADER */
+.hero{text-align:center;padding:10px 0 30px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);
+  color:var(--accent3);font-size:11px;font-weight:700;letter-spacing:.12em;
+  padding:6px 16px;border-radius:30px;text-transform:uppercase;margin-bottom:16px;
+}
+.hero h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(22px,5vw,32px);font-weight:800;
+  color:#fff;line-height:1.2;margin-bottom:8px;
+}
+.hero h1 span{
+  background:linear-gradient(135deg,var(--accent3),var(--green));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{font-size:13px;color:var(--text2)}
+
+/* TABS */
+.tabs{display:flex;background:var(--card);border-radius:12px;padding:5px;gap:4px;margin-bottom:16px;border:1px solid var(--border)}
+.tab{flex:1;padding:9px 6px;border-radius:9px;border:none;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;font-family:'Inter',sans-serif}
+.tab.act{background:var(--accent);color:#fff}
+.tab:hover:not(.act){background:var(--bg3);color:var(--text)}
+
+/* SECTION */
+.section{display:none}
+.section.act{display:block}
+
+/* CARD */
+.card{background:var(--card);border-radius:var(--r);padding:18px 20px;margin-bottom:12px;border:1px solid var(--border)}
+.card-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.card-num{
+  width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.card-title{font-size:13px;font-weight:600;color:var(--text2);letter-spacing:.02em}
+.card-title b{color:var(--text)}
+
+/* UPLOAD ZONE */
+.upload-zone{
+  border:2px dashed var(--border2);border-radius:12px;padding:26px 20px;
+  text-align:center;cursor:pointer;transition:all .2s;background:var(--bg3);
+}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(108,99,255,.07)}
+.upload-zone input{display:none}
+.up-icon{font-size:30px;color:var(--accent);margin-bottom:8px}
+.up-text{font-size:14px;color:var(--text2);margin-bottom:3px}
+.up-sub{font-size:11px;color:#55557a}
+.up-btn{
+  display:inline-block;margin-top:10px;background:var(--accent);
+  color:#fff;font-size:12px;font-weight:600;padding:7px 18px;border-radius:20px;cursor:pointer;border:none
+}
+.ai-status{background:var(--bg3);border-radius:10px;padding:12px 14px;margin-top:10px;font-size:13px;display:none;border:1px solid var(--border)}
+.ai-status.show{display:block}
+.ai-status.loading{color:var(--accent3);border-color:rgba(108,99,255,.3)}
+.ai-status.done{color:var(--green);border-color:rgba(34,211,165,.25)}
+.ai-status.err{color:var(--red);border-color:rgba(244,63,94,.25)}
+.ai-result{background:var(--bg3);border-radius:10px;padding:14px;margin-top:8px;display:none;border:1px solid rgba(34,211,165,.2)}
+.ai-result.show{display:block}
+.ai-result-title{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.ai-field{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
+.ai-field:last-child{border-bottom:none}
+.ai-field-name{color:var(--text2)}
+.ai-field-val{color:var(--text);font-weight:500;text-align:right;max-width:58%}
+
+/* FORM CONTROLS */
+select,input[type=text],textarea{
+  width:100%;background:var(--bg3);color:var(--text);
+  border:1px solid var(--border2);border-radius:10px;
+  padding:11px 14px;font-size:14px;font-family:'Inter',sans-serif;
+  -webkit-appearance:none;appearance:none;outline:none;
+  transition:border-color .2s;
+}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238888aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;
+}
+select:focus,input[type=text]:focus,textarea:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:70px}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{
+  padding:7px 13px;border-radius:20px;border:1.5px solid var(--border2);
+  font-size:12px;color:var(--text2);background:var(--bg3);cursor:pointer;
+  transition:all .15s;font-family:'Inter',sans-serif;
+}
+.chip:hover{border-color:var(--accent);color:var(--accent3)}
+.chip.sel{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.chip.sel2{background:rgba(34,211,165,.15);border-color:var(--green);color:var(--green);font-weight:600}
+
+/* RANGE */
+.slider-wrap{margin-top:6px}
+input[type=range]{
+  width:100%;-webkit-appearance:none;appearance:none;
+  height:5px;background:var(--border2);border-radius:3px;outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+  background:var(--accent);border:2px solid #fff;box-shadow:0 0 0 2px rgba(108,99,255,.3)
+}
+input[type=range].green::-webkit-slider-thumb{background:var(--green);box-shadow:0 0 0 2px rgba(34,211,165,.3)}
+.range-labels{display:flex;justify-content:space-between;font-size:10px;color:#55557a;margin-top:4px}
+.range-val{font-size:22px;font-weight:700;color:var(--accent3)}
+
+/* RESULTS */
+.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.res-card{background:var(--card2);border-radius:var(--r);padding:18px;border:1px solid var(--border);text-align:center}
+.res-label{font-size:11px;color:var(--text2);margin-bottom:7px;font-weight:500}
+.res-price{font-size:clamp(22px,5vw,28px);font-weight:800;font-family:'Syne',sans-serif}
+.res-card.market .res-price{color:var(--accent3)}
+.res-card.yours .res-price{color:var(--green)}
+.res-sub{font-size:11px;color:#66668a;margin-top:4px}
+
+.breakdown{background:var(--card2);border-radius:var(--r);padding:16px 18px;margin-bottom:12px;border:1px solid var(--border)}
+.bd-title{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.bd-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}
+.bd-row:last-child{border-bottom:none}
+.bd-name{color:var(--text2)}
+.bd-val{font-weight:600}
+.bd-val.up{color:var(--green)}
+.bd-val.dn{color:var(--red)}
+.bd-val.neu{color:var(--accent3)}
+
+.income-card{background:var(--card2);border-radius:var(--r);padding:16px 18px;margin-bottom:12px;border:1px solid var(--border)}
+.income-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.inc-cell{text-align:center;background:var(--bg3);border-radius:10px;padding:12px 6px;border:1px solid var(--border)}
+.inc-orders{font-size:10px;color:var(--text2);margin-bottom:5px}
+.inc-val{font-size:16px;font-weight:700;color:var(--green);font-family:'Syne',sans-serif}
+.inc-note{text-align:center;font-size:10px;color:#44446a;margin-top:8px}
+
+/* PRICE TABLE */
+.price-table{width:100%;border-collapse:collapse;font-size:12px}
+.price-table th{
+  background:var(--bg3);color:var(--text2);font-weight:600;
+  padding:9px 12px;text-align:left;border-bottom:2px solid var(--border2);
+  font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+}
+.price-table td{
+  padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top
+}
+.price-table tr:hover td{background:rgba(108,99,255,.04)}
+.price-table .price-cell{font-weight:700;color:var(--accent3);white-space:nowrap}
+.price-table .type-badge{
+  display:inline-block;font-size:10px;font-weight:600;
+  padding:2px 8px;border-radius:10px;margin-top:3px;
+}
+.badge-hum{background:rgba(139,92,246,.15);color:#a78bfa}
+.badge-tech{background:rgba(34,211,165,.12);color:var(--green)}
+.badge-med{background:rgba(244,63,94,.12);color:#fb7185}
+.badge-it{background:rgba(245,158,11,.12);color:var(--yellow)}
+.badge-extra{background:rgba(108,99,255,.15);color:var(--accent3)}
+
+/* COMPARE TAB */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.comp-card{background:var(--card2);border-radius:var(--r);padding:16px;border:1px solid var(--border)}
+.comp-head{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.comp-item{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
+.comp-item:last-child{border-bottom:none}
+
+/* TIPS */
+.tip-card{background:var(--card2);border-radius:var(--r);padding:16px 18px;margin-bottom:10px;border:1px solid var(--border)}
+.tip-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.tip-icon{font-size:18px;color:var(--green)}
+.tip-title{font-size:13px;font-weight:700;color:var(--text)}
+.tip-body{font-size:13px;color:var(--text2);line-height:1.6}
+.tip-body li{margin-left:16px;margin-top:4px}
+
+/* BUTTONS */
+.btn-primary{
+  width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;font-size:14px;font-weight:700;padding:13px;
+  border-radius:10px;border:none;cursor:pointer;
+  transition:opacity .15s;font-family:'Inter',sans-serif;letter-spacing:.02em;
+}
+.btn-primary:hover{opacity:.88}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed}
+.btn-green{background:linear-gradient(135deg,var(--green2),var(--green))}
+.btn-copy{
+  background:var(--bg3);color:var(--text2);font-size:12px;font-weight:600;
+  padding:8px 16px;border-radius:8px;border:1px solid var(--border2);
+  cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;
+  display:inline-flex;align-items:center;gap:5px;
+}
+.btn-copy:hover{border-color:var(--accent);color:var(--accent3)}
+
+/* INVOICE */
+.invoice-box{background:var(--bg3);border-radius:12px;padding:18px;border:1px solid var(--border);margin-top:12px}
+.inv-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)}
+.inv-row:last-child{border-bottom:none;font-size:15px;font-weight:700;padding-top:10px;margin-top:4px}
+.inv-total .inv-row:last-child{color:var(--green)}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:6px 0 14px}
+
+/* EXTRAS */
+.extra-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.extra-chip{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1.5px solid var(--border2);
+  border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .15s;
+}
+.extra-chip:hover{border-color:var(--accent)}
+.extra-chip.sel{border-color:var(--accent);background:rgba(108,99,255,.08)}
+.extra-chip input[type=checkbox]{display:none}
+.extra-check{
+  width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);
+  background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:10px;transition:all .15s;
+}
+.extra-chip.sel .extra-check{background:var(--accent);border-color:var(--accent);color:#fff}
+.extra-label{font-size:12px;color:var(--text2);flex:1}
+.extra-chip.sel .extra-label{color:var(--text)}
+.extra-price{font-size:11px;color:var(--accent3);font-weight:600}
+
+/* URGENCY INDICATOR */
+.urg-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px}
+.urg-item{
+  padding:9px 6px;border-radius:10px;border:1.5px solid var(--border2);
+  text-align:center;cursor:pointer;transition:all .15s;background:var(--bg3);
+}
+.urg-item:hover{border-color:var(--accent)}
+.urg-item.sel{border-color:var(--accent);background:rgba(108,99,255,.1)}
+.urg-item .urg-ico{font-size:18px;margin-bottom:4px}
+.urg-item .urg-label{font-size:10px;color:var(--text2);line-height:1.3}
+.urg-item .urg-mult{font-size:12px;font-weight:700;color:var(--accent3);margin-top:2px}
+.urg-item.sel .urg-mult{color:var(--green)}
+
+/* MOBILE */
+@media(max-width:500px){
+  .results-grid,.compare-grid{grid-template-columns:1fr}
+  .income-grid{grid-template-columns:1fr 1fr}
+  .extra-grid{grid-template-columns:1fr}
+  .urg-bar{grid-template-columns:1fr 1fr}
+}
+
+/* ANIMATIONS */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card,.results-grid,.income-card,.breakdown{animation:fadeIn .25s ease both}
+
+.price-change{animation:priceFlash .3s ease}
+@keyframes priceFlash{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.06)}
+  100%{transform:scale(1)}
+}
+
+/* RANGE TRACK FILL */
+.track-fill{position:relative}
+.track-fill input[type=range]{
+  background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--fill,0%),var(--border2) var(--fill,0%),var(--border2) 100%);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="hero-badge"><i class="ti ti-calculator"></i> Калькулятор</div>
+    <h1>Вартість студентських<br><span>робіт 2026</span></h1>
+    <p class="hero-sub">Актуальні ціни · Всі типи робіт · Україна</p>
+  </div>
+
+  <div class="tabs" id="main-tabs">
+    <button class="tab act" onclick="switchTab(0)"><i class="ti ti-calculator" style="font-size:14px"></i> Калькулятор</button>
+    <button class="tab" onclick="switchTab(1)"><i class="ti ti-list" style="font-size:14px"></i> Прайс</button>
+    <button class="tab" onclick="switchTab(2)"><i class="ti ti-file-invoice" style="font-size:14px"></i> Рахунок</button>
+    <button class="tab" onclick="switchTab(3)"><i class="ti ti-bulb" style="font-size:14px"></i> Поради</button>
+  </div>
+
+  <!-- ======= CALCULATOR TAB ======= -->
+  <div class="section act" id="tab-calc">
+
+    <!-- AI UPLOAD -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num" style="background:linear-gradient(135deg,#8b5cf6,#6c63ff)"><i class="ti ti-sparkles" style="font-size:11px"></i></div>
+        <div class="card-title"><b>ШІ-аналіз методички</b> — завантаж PDF/Word, ШІ заповнить усе сам</div>
+      </div>
+      <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+        <div ondragover="event.preventDefault();this.closest('.upload-zone').classList.add('drag')" ondragleave="this.closest('.upload-zone').classList.remove('drag')" ondrop="handleDrop(event)">
+          <div class="up-icon"><i class="ti ti-file-upload"></i></div>
+          <div class="up-text">Перетягніть або натисніть</div>
+          <div class="up-sub">PDF, DOC, DOCX, TXT — до 10 МБ</div>
+          <input type="file" id="file-input" accept=".pdf,.doc,.docx,.txt" onchange="handleFile(this.files[0])">
+        </div>
+      </div>
+      <div class="ai-status" id="ai-status"></div>
+      <div class="ai-result" id="ai-result">
+        <div class="ai-result-title"><i class="ti ti-robot" style="margin-right:4px"></i>Що знайшов ШІ</div>
+        <div id="ai-fields"></div>
+      </div>
+      <button class="btn-primary" id="apply-btn" disabled onclick="applyAiResult()" style="margin-top:10px">Застосувати до калькулятора</button>
+    </div>
+
+    <!-- TYPE -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num">1</div>
+        <div class="card-title"><b>Тип роботи</b></div>
+      </div>
+      <select id="sel-type" onchange="onTypeChange()">
+        <optgroup label="── Письмові роботи ──">
+          <option value="ese">Есе / Стаття (~5–10 стор.)</option>
+          <option value="ref">Реферат (~10–15 стор.)</option>
+          <option value="kontr">Контрольна (~10–20 стор.)</option>
+          <option value="kurs" selected>Курсова (~25–35 стор.)</option>
+          <option value="bak">Бакалаврська (~55–70 стор.)</option>
+          <option value="dipl">Дипломна (~70–90 стор.)</option>
+          <option value="mag">Магістерська (~90–110 стор.)</option>
+          <option value="dis">Дисертація PhD (~200+ стор.)</option>
+        </optgroup>
+        <optgroup label="── Звіти / Практика ──">
+          <option value="zvit">Звіт з практики (~20–30 стор.)</option>
+          <option value="labs">Лабораторна робота</option>
+          <option value="ind">Індивідуальне завдання</option>
+        </optgroup>
+        <optgroup label="── Технічні завдання ──">
+          <option value="code">Програмний код / Скрипт</option>
+          <option value="db">База даних (SQL)</option>
+          <option value="site">Веб-сайт / Верстка</option>
+          <option value="app">Мобільний або десктоп-додаток</option>
+        </optgroup>
+        <optgroup label="── Наукові / Специфічні ──">
+          <option value="nauk">Наукова стаття (ВАК/Scopus)</option>
+          <option value="tezi">Тези доповіді</option>
+          <option value="rev">Рецензія / Анотація</option>
+          <option value="plan">Бізнес-план / Проект</option>
+          <option value="prez">Презентація (PowerPoint)</option>
+          <option value="test">Тест / Залікове завдання онлайн</option>
+          <option value="perev">Переклад документу</option>
+          <option value="edit">Редагування / Коректура</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <!-- KIND -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num">2</div>
+        <div class="card-title"><b>Вид виконання</b></div>
+      </div>
+      <div class="chips" id="kind-chips"></div>
+    </div>
+
+    <!-- SUBJECT -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num">3</div>
+        <div class="card-title"><b>Предмет / Спеціальність</b></div>
+      </div>
+      <select id="sel-spec" onchange="calc()">
+        <optgroup label="── Гуманітарні ──">
+          <option value="1.00">Педагогіка / Соціологія / Культурологія</option>
+          <option value="1.05">Право / Юриспруденція</option>
+          <option value="1.03">Менеджмент / Маркетинг / Туризм</option>
+          <option value="1.10">Психологія</option>
+          <option value="1.08">Іноземна мова / Філологія / Переклад</option>
+          <option value="1.05">Журналістика / PR / Реклама</option>
+        </optgroup>
+        <optgroup label="── Економічні ──">
+          <option value="1.15">Економіка / Фінанси / Банківська справа</option>
+          <option value="1.12">Бухгалтерія / Облік та аудит</option>
+          <option value="1.10">Міжнародна економіка / МЕВ</option>
+          <option value="1.08">Логістика / Управління ланцюгами</option>
+        </optgroup>
+        <optgroup label="── Технічні ──">
+          <option value="1.30">ІТ / Комп'ютерні науки / Програмування</option>
+          <option value="1.25">Кібербезпека / Мережі</option>
+          <option value="1.20">Електроніка / Автоматика / Механіка</option>
+          <option value="1.20">Будівництво / Архітектура</option>
+          <option value="1.18">Хімія / Хімічна технологія</option>
+          <option value="1.15">Фізика / Математика / Статистика</option>
+          <option value="1.15">Екологія / Природні ресурси</option>
+        </optgroup>
+        <optgroup label="── Медичні / Біо ──">
+          <option value="1.40">Медицина / Стоматологія</option>
+          <option value="1.35">Фармація / Нутриціологія</option>
+          <option value="1.25">Біологія / Ветеринарія</option>
+          <option value="1.20">Фізична культура / Спорт / Реабілітація</option>
+        </optgroup>
+        <optgroup label="── Інші ──">
+          <option value="1.00">Інша (не вказана)</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <!-- PAGES (conditional) -->
+    <div class="card" id="pages-card">
+      <div class="card-head">
+        <div class="card-num">4</div>
+        <div class="card-title"><b>Кількість сторінок:</b> <span class="range-val" id="pages-out">30</span></div>
+      </div>
+      <div class="slider-wrap track-fill" id="pages-track">
+        <input type="range" id="pages-range" min="5" max="250" step="5" value="30" oninput="onPagesChange()">
+        <div class="range-labels"><span>5</span><span>50</span><span>100</span><span>150</span><span>200+</span></div>
+      </div>
+    </div>
+
+    <!-- URGENCY (card with visual buttons) -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num">5</div>
+        <div class="card-title"><b>Термін виконання</b></div>
+      </div>
+      <div class="urg-bar" id="urg-bar"></div>
+    </div>
+
+    <!-- UNIQUENESS -->
+    <div class="card" id="uniq-card">
+      <div class="card-head">
+        <div class="card-num">6</div>
+        <div class="card-title"><b>Унікальність тексту</b></div>
+      </div>
+      <select id="sel-uniq" onchange="calc()">
+        <option value="1.00">Без вимог</option>
+        <option value="1.02">50–60% (базова)</option>
+        <option value="1.05" selected>60–70% (курсова)</option>
+        <option value="1.10">70–80% (бакалаврська)</option>
+        <option value="1.18">80–90% (підвищена)</option>
+        <option value="1.28">90%+ (максимальна, Unicheck)</option>
+      </select>
+    </div>
+
+    <!-- EXTRAS -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num">7</div>
+        <div class="card-title"><b>Додаткові послуги</b></div>
+      </div>
+      <div class="extra-grid" id="extras-grid"></div>
+    </div>
+
+    <!-- DISCOUNT -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-num">8</div>
+        <div class="card-title"><b>Знижка клієнту:</b> <span class="range-val" style="font-size:20px" id="disc-out">0%</span></div>
+      </div>
+      <div class="slider-wrap track-fill" id="disc-track">
+        <input type="range" class="green" id="disc-range" min="0" max="40" step="5" value="0" oninput="onDiscChange()">
+        <div class="range-labels"><span>0%</span><span>-10%</span><span>-20%</span><span>-30%</span><span>-40%</span></div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-grid">
+      <div class="res-card market">
+        <div class="res-label">Ринкова ціна</div>
+        <div class="res-price" id="market-price">—</div>
+        <div class="res-sub">середня по ринку</div>
+      </div>
+      <div class="res-card yours">
+        <div class="res-label">Ваша ціна</div>
+        <div class="res-price" id="your-price">—</div>
+        <div class="res-sub" id="your-sub">без знижки</div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <div class="bd-title">Розбивка ціни</div>
+      <div class="bd-row"><span class="bd-name">Базова ціна роботи</span><span class="bd-val neu" id="bd-base">—</span></div>
+      <div class="bd-row"><span class="bd-name">Вид виконання</span><span class="bd-val" id="bd-kind">—</span></div>
+      <div class="bd-row"><span class="bd-name">Предмет / Складність</span><span class="bd-val" id="bd-spec">—</span></div>
+      <div class="bd-row"><span class="bd-name">Термін (терміновість)</span><span class="bd-val" id="bd-urg">—</span></div>
+      <div class="bd-row"><span class="bd-name">Унікальність</span><span class="bd-val" id="bd-uniq">—</span></div>
+      <div class="bd-row"><span class="bd-name">Обсяг (сторінки)</span><span class="bd-val" id="bd-pages">—</span></div>
+      <div class="bd-row"><span class="bd-name">Доп. послуги</span><span class="bd-val" id="bd-extras">—</span></div>
+      <div class="bd-row" style="border-top:2px solid var(--border2);margin-top:6px;padding-top:8px;font-weight:700">
+        <span class="bd-name" style="color:var(--text)">Разом</span><span class="bd-val" style="color:var(--green);font-size:15px" id="bd-total">—</span>
+      </div>
+    </div>
+
+    <div class="income-card">
+      <div class="bd-title" style="margin-bottom:10px">Прогноз доходу за місяць</div>
+      <div class="income-grid">
+        <div class="inc-cell"><div class="inc-orders">10 замов.</div><div class="inc-val" id="inc10">—</div></div>
+        <div class="inc-cell"><div class="inc-orders">30 замов.</div><div class="inc-val" id="inc30">—</div></div>
+        <div class="inc-cell"><div class="inc-orders">60 замов.</div><div class="inc-val" id="inc60">—</div></div>
+        <div class="inc-cell"><div class="inc-orders">100 замов.</div><div class="inc-val" id="inc100">—</div></div>
+      </div>
+      <div class="inc-note">* орієнтовно, без врахування витрат і виконавців</div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn-copy" onclick="copyResult()"><i class="ti ti-copy"></i> Копіювати ціну</button>
+      <button class="btn-copy" onclick="goInvoice()"><i class="ti ti-file-invoice"></i> Сформувати рахунок</button>
+      <button class="btn-copy" id="share-btn" onclick="shareCalc()"><i class="ti ti-share"></i> Поділитись</button>
+    </div>
+
+  </div><!-- /tab-calc -->
+
+  <!-- ======= PRICE LIST TAB ======= -->
+  <div class="section" id="tab-price">
+    <div class="card">
+      <div class="card-head" style="margin-bottom:0">
+        <i class="ti ti-list" style="color:var(--accent3)"></i>
+        <div class="card-title"><b>Повний прайс-лист 2026</b> — орієнтовні ринкові ціни по Україні</div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="price-table">
+        <thead>
+          <tr><th>Тип роботи</th><th>Обсяг</th><th>Гуманітарні</th><th>Тех./ІТ</th><th>Медицина</th></tr>
+        </thead>
+        <tbody id="price-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:4px">
+      <div class="bd-title">Коефіцієнти терміновості</div>
+      <div class="bd-row"><span class="bd-name">2+ тижні</span><span class="bd-val" style="color:var(--green)">×0.85 (знижка)</span></div>
+      <div class="bd-row"><span class="bd-name">1–2 тижні</span><span class="bd-val neu">×1.00 (стандарт)</span></div>
+      <div class="bd-row"><span class="bd-name">3–5 днів</span><span class="bd-val" style="color:var(--yellow)">×1.25</span></div>
+      <div class="bd-row"><span class="bd-name">1–2 дні</span><span class="bd-val" style="color:var(--red)">×1.55</span></div>
+      <div class="bd-row"><span class="bd-name">До 12 годин</span><span class="bd-val" style="color:var(--red)">×2.00 (!)</span></div>
+    </div>
+
+    <div class="card">
+      <div class="bd-title">Коефіцієнти унікальності</div>
+      <div class="bd-row"><span class="bd-name">Без вимог</span><span class="bd-val neu">×1.00</span></div>
+      <div class="bd-row"><span class="bd-name">50–60%</span><span class="bd-val neu">×1.02</span></div>
+      <div class="bd-row"><span class="bd-name">60–70%</span><span class="bd-val" style="color:var(--yellow)">×1.05</span></div>
+      <div class="bd-row"><span class="bd-name">70–80%</span><span class="bd-val" style="color:var(--yellow)">×1.10</span></div>
+      <div class="bd-row"><span class="bd-name">80–90%</span><span class="bd-val" style="color:var(--red)">×1.18</span></div>
+      <div class="bd-row"><span class="bd-name">90%+ (Unicheck)</span><span class="bd-val" style="color:var(--red)">×1.28</span></div>
+    </div>
+  </div>
+
+  <!-- ======= INVOICE TAB ======= -->
+  <div class="section" id="tab-invoice">
+    <div class="card">
+      <div class="card-head"><i class="ti ti-file-invoice" style="color:var(--accent3)"></i><div class="card-title"><b>Формування рахунку для клієнта</b></div></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div>
+          <div class="card-title" style="margin-bottom:6px">Одержувач</div>
+          <input type="text" id="inv-seller" value="ФОП Десятерик Оксана Сергіївна" placeholder="Виконавець">
+        </div>
+        <div>
+          <div class="card-title" style="margin-bottom:6px">Ім'я клієнта</div>
+          <input type="text" id="inv-buyer" placeholder="Петро Мельниченко">
+        </div>
+      </div>
+
+      <div style="margin-bottom:10px">
+        <div class="card-title" style="margin-bottom:6px">Опис послуги</div>
+        <textarea id="inv-desc" placeholder="Курсова робота з економіки, 30 стор., 70% унікальність, термін 7 днів"></textarea>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div>
+          <div class="card-title" style="margin-bottom:6px">Сума (грн)</div>
+          <input type="text" id="inv-amount" placeholder="2200">
+        </div>
+        <div>
+          <div class="card-title" style="margin-bottom:6px">Передоплата %</div>
+          <select id="inv-prepay">
+            <option value="0">Без передоплати</option>
+            <option value="30">30%</option>
+            <option value="50" selected>50%</option>
+            <option value="100">100% (повна)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-bottom:10px">
+        <div class="card-title" style="margin-bottom:6px">Спосіб оплати</div>
+        <div class="chips">
+          <button class="chip sel" onclick="selPayment(this,'iban')">🏦 IBAN (ФОП)</button>
+          <button class="chip" onclick="selPayment(this,'link')">🔗 Платіжне посилання</button>
+        </div>
+      </div>
+
+      <!-- FOP IBAN block -->
+      <div id="fop-iban-block" style="margin-bottom:10px;background:var(--bg3);border:1px solid rgba(108,99,255,.3);border-radius:12px;padding:14px">
+        <div style="font-size:10px;font-weight:700;color:var(--accent3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">📋 Реквізити для оплати</div>
+        <div class="inv-row"><span style="color:var(--text2)">Одержувач:</span><span style="font-weight:600">ФОП Десятерик Оксана Сергіївна</span></div>
+        <div class="inv-row"><span style="color:var(--text2)">IBAN:</span><span style="font-family:monospace;font-size:12px;color:var(--accent3)">UA543220010000026003360042551</span></div>
+        <div class="inv-row"><span style="color:var(--text2)">ЄДРПОУ:</span><span style="font-family:monospace">2926601387</span></div>
+        <div class="inv-row"><span style="color:var(--text2)">МФО:</span><span style="font-family:monospace">322001</span></div>
+        <div class="inv-row"><span style="color:var(--text2)">Банк:</span><span>АТ «УНІВЕРСАЛ БАНК»</span></div>
+        <div class="inv-row" style="border-bottom:none"><span style="color:var(--text2)">Призначення:</span><span style="text-align:right;max-width:55%;font-size:12px;color:var(--green)">Оплата за інформаційно-консультаційні послуги сервісу "Kursio" згідно замовлення №<span id="inv-order-num-preview" style="color:var(--yellow)">___</span></span></div>
+      </div>
+
+      <!-- Payment link block -->
+      <div id="fop-link-block" style="display:none;margin-bottom:10px;background:var(--bg3);border:1px solid rgba(34,211,165,.3);border-radius:12px;padding:14px">
+        <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">🔗 Платіжне посилання</div>
+        <div style="margin-bottom:8px">
+          <div class="card-title" style="margin-bottom:6px;font-size:11px">Посилання для оплати</div>
+          <input type="text" id="inv-pay-link" placeholder="https://send.monobank.ua/... або інше посилання">
+        </div>
+        <div style="font-size:11px;color:var(--text2)">Клієнт перейде за посиланням та сплатить онлайн</div>
+      </div>
+
+      <div style="margin-bottom:10px">
+        <div class="card-title" style="margin-bottom:6px">Номер замовлення</div>
+        <input type="text" id="inv-order" placeholder="Наприклад: 2847" oninput="updateOrderPreview(this.value)">
+      </div>
+
+      <button class="btn-primary btn-green" onclick="generateInvoice()">Сформувати рахунок</button>
+    </div>
+
+    <div id="invoice-output" style="display:none">
+      <div class="invoice-box">
+        <div style="text-align:center;margin-bottom:14px">
+          <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff">РАХУНОК НА ОПЛАТУ</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px" id="inv-date-out"></div>
+        </div>
+        <div id="inv-body"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn-copy" onclick="copyInvoice()"><i class="ti ti-copy"></i> Копіювати текст</button>
+        <button class="btn-copy" onclick="printInvoice()"><i class="ti ti-printer"></i> Друк / PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= TIPS TAB ======= -->
+  <div class="section" id="tab-tips">
+
+    <div class="tip-card">
+      <div class="tip-head"><span class="tip-icon"><i class="ti ti-trending-up"></i></span><div class="tip-title">Як правильно встановити ціну</div></div>
+      <div class="tip-body">
+        <ul>
+          <li>Новачок? Стартуй з ціни ×0.7–0.8 від ринку, нарощуй відгуки</li>
+          <li>Після 20+ відгуків — виходь на ринкову або вищу</li>
+          <li>Спеціалізація (медицина, ІТ) = вища ціна без пояснень</li>
+          <li>Не бери менше 500–600 грн за будь-яку роботу</li>
+          <li>Рахуй свою годинну ставку: ціна ÷ час = не менше 200–250 грн/год</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-head"><span class="tip-icon"><i class="ti ti-shield-check"></i></span><div class="tip-title">Передоплата та захист</div></div>
+      <div class="tip-body">
+        <ul>
+          <li>Завжди бери передоплату 30–50% до початку роботи</li>
+          <li>Для нових клієнтів — 50–100% наперед або не берись</li>
+          <li>Не відправляй роботу повністю до фінальної оплати (надсилай скрін або 2 сторінки)</li>
+          <li>Фіксуй домовленості скрінами або повідомленнями</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-head"><span class="tip-icon"><i class="ti ti-clock"></i></span><div class="tip-title">Терміновість: золоте правило</div></div>
+      <div class="tip-body">
+        <ul>
+          <li>Замовлення «на вчора» — мінімум +50–100% до ціни</li>
+          <li>Нічна робота та вихідні — враховуй у ціні</li>
+          <li>Якщо не впевнений — краще відмовитись, ніж зробити погано</li>
+          <li>Встанови реалістичний дедлайн + 1 день запасу</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-head"><span class="tip-icon"><i class="ti ti-users"></i></span><div class="tip-title">Де шукати замовників у 2026</div></div>
+      <div class="tip-body">
+        <ul>
+          <li>Telegram-групи студентів (шукай за назвами університетів)</li>
+          <li>OLX — розділ «Послуги → Освіта»</li>
+          <li>Work.ua, DOU.ua (для ІТ-завдань)</li>
+          <li>Instagram/TikTok — короткі відео про переваги роботи</li>
+          <li>Сарафанне радіо: 1 задоволений клієнт = 3–5 нових</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-head"><span class="tip-icon"><i class="ti ti-robot"></i></span><div class="tip-title">ШІ-інструменти для виконавців</div></div>
+      <div class="tip-body">
+        <ul>
+          <li>Claude, ChatGPT — черновики та структура</li>
+          <li>Grammarly / LanguageTool — вичитка тексту</li>
+          <li>Unicheck, Antiplagiat — перевірка унікальності</li>
+          <li>Quillbot — перефразування (обережно: якість падає)</li>
+          <li>Не здавай чистий ШІ-текст — рефрейм і доопрацьовуй!</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-head"><span class="tip-icon" style="color:var(--yellow)"><i class="ti ti-alert-triangle"></i></span><div class="tip-title">Топ помилок виконавців</div></div>
+      <div class="tip-body">
+        <ul>
+          <li>Брати роботу без предоплати у нових клієнтів</li>
+          <li>Занижувати ціну «щоб взяли» — потім не поважатимуть</li>
+          <li>Не уточнювати вимоги до роботи (дедлайн, ВНЗ, кафедра)</li>
+          <li>Обіцяти 90% унікальності за ціну 60% — нереально</li>
+          <li>Не брати пакетний оплаті при довгих роботах</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /wrap -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ─── DATA ───────────────────────────────────────────────
+const BASE={
+  ese:450, ref:650, kontr:750, kurs:1900, bak:4200, dipl:5500, mag:7500, dis:22000,
+  zvit:1800, labs:600, ind:700,
+  code:1800, db:1600, site:3500, app:7000,
+  nauk:2500, tezi:600, rev:400, plan:3800, prez:700, test:500, perev:80, edit:50
+};
+const BASE_PG={
+  ese:8, ref:12, kontr:15, kurs:30, bak:60, dipl:80, mag:100, dis:200,
+  zvit:25, labs:10, ind:15,
+  code:0, db:0, site:0, app:0,
+  nauk:8, tezi:4, rev:3, plan:20, prez:10, test:0, perev:1, edit:1
+};
+// per-page unit for types that are priced per page
+const PER_PAGE={perev:85, edit:35};
+const NO_PAGES=['code','db','site','app','test'];
+
+const KINDS=[
+  {label:'Теоретична',mult:1.00},
+  {label:'З практичною частиною',mult:1.18},
+  {label:'З кодом / ІТ',mult:1.48},
+  {label:'З опитуванням',mult:1.25},
+  {label:'Теорія + практика',mult:1.12},
+  {label:'Мultimedia / Дизайн',mult:1.30},
+];
+
+const URGENCIES=[
+  {label:'3+ тижні',ico:'🕰️',mult:0.85,desc:'−15%'},
+  {label:'1–2 тижні',ico:'📅',mult:1.00,desc:'стандарт'},
+  {label:'3–5 днів',ico:'⚡',mult:1.25,desc:'+25%'},
+  {label:'1–2 дні',ico:'🔥',mult:1.55,desc:'+55%'},
+];
+
+const EXTRAS=[
+  {id:'slides',label:'Презентація (PPT)',price:500},
+  {id:'speech',label:'Текст виступу / доповіді',price:350},
+  {id:'review',label:'Рецензія / відгук',price:450},
+  {id:'unicheck',label:'Звіт Unicheck/Antiplagiat',price:300},
+  {id:'sources',label:'Список джерел (оформлення)',price:200},
+  {id:'refactor',label:'Рефакторинг коду',price:400},
+  {id:'corrections',label:'Правки після здачі (2 тижні)',price:250},
+  {id:'express',label:'Пріоритетна підтримка',price:300},
+];
+
+const PRICE_TABLE=[
+  ['Есе',        '5–10 стор.', 450,  600,  800,  'hum'],
+  ['Реферат',    '10–15 стор.',650,  900,  1200, 'hum'],
+  ['Контрольна', '10–20 стор.',750,  950,  1300, 'hum'],
+  ['Курсова',    '25–35 стор.',1900, 2700, 3800, 'hum'],
+  ['Бакалаврська','55–70 стор.',4200, 6000, 8000,'hum'],
+  ['Дипломна',   '70–90 стор.',5500, 7500,10500,'hum'],
+  ['Магістерська','90–110 стор.',7500,10000,14000,'hum'],
+  ['Дисертація', '200+ стор.', 22000,30000,45000,'hum'],
+  ['Звіт з практики','20–30 стор.',1800,2300,3200,'hum'],
+  ['Лабораторна','10–15 стор.',600,  900,  1400, 'hum'],
+  ['Наукова стаття','6–10 стор.',2500,3500,5000,'hum'],
+  ['Переклад',   '1 стор.',    85,   110,  150,  'hum'],
+  ['Редагування','1 стор.',    35,   50,   70,   'hum'],
+  ['Код / скрипт','—',        1800, 2800, 4500, 'it'],
+  ['База даних', '—',         1600, 2400, 4000, 'it'],
+  ['Веб-сайт',   '—',         3500, 5000, 9000, 'it'],
+  ['Мобільний додаток','—',   7000,12000,22000, 'it'],
+  ['Бізнес-план','15–25 стор.',3800,5000, 7500, 'hum'],
+  ['Презентація','10–20 слайд.',700, 1000, 1800,'hum'],
+];
+
+// ─── STATE ──────────────────────────────────────────────
+let selKind=0, selUrg=1, selExtras=new Set();
+let aiData=null, paymentMethod='iban';
+
+// ─── INIT ────────────────────────────────────────────────
+function init(){
+  makeKindChips();
+  makeUrgBar();
+  makeExtrasGrid();
+  buildPriceTable();
+  calc();
+  updateRangeTrack('pages-track','pages-range');
+  updateRangeTrack('disc-track','disc-range');
+}
+
+function makeKindChips(){
+  const el=document.getElementById('kind-chips');
+  el.innerHTML='';
+  KINDS.forEach((k,i)=>{
+    const b=document.createElement('button');
+    b.className='chip'+(i===0?' sel':'');
+    b.textContent=k.label+' ×'+k.mult.toFixed(2);
+    b.onclick=()=>{selKind=i;el.querySelectorAll('.chip').forEach(c=>c.className='chip');b.className='chip sel';calc()};
+    el.appendChild(b);
+  });
+}
+
+function makeUrgBar(){
+  const el=document.getElementById('urg-bar');
+  el.innerHTML='';
+  URGENCIES.forEach((u,i)=>{
+    const d=document.createElement('div');
+    d.className='urg-item'+(i===1?' sel':'');
+    d.innerHTML=`<div class="urg-ico">${u.ico}</div><div class="urg-label">${u.label}</div><div class="urg-mult">${u.desc}</div>`;
+    d.onclick=()=>{selUrg=i;el.querySelectorAll('.urg-item').forEach(x=>x.className='urg-item');d.className='urg-item sel';calc()};
+    el.appendChild(d);
+  });
+}
+
+function makeExtrasGrid(){
+  const el=document.getElementById('extras-grid');
+  el.innerHTML='';
+  EXTRAS.forEach(ex=>{
+    const d=document.createElement('div');
+    d.className='extra-chip';
+    d.id='ex-'+ex.id;
+    d.innerHTML=`<div class="extra-check" id="exck-${ex.id}"></div><div class="extra-label">${ex.label}</div><div class="extra-price">+${ex.price} грн</div>`;
+    d.onclick=()=>{
+      if(selExtras.has(ex.id)){selExtras.delete(ex.id);d.className='extra-chip';document.getElementById('exck-'+ex.id).textContent=''}
+      else{selExtras.add(ex.id);d.className='extra-chip sel';document.getElementById('exck-'+ex.id).textContent='✓'}
+      calc();
+    };
+    el.appendChild(d);
+  });
+}
+
+function buildPriceTable(){
+  const tb=document.getElementById('price-tbody');
+  const badgeCls={hum:'badge-hum',it:'badge-it',med:'badge-med'};
+  tb.innerHTML=PRICE_TABLE.map(([name,vol,p1,p2,p3,cat])=>`
+    <tr>
+      <td><b>${name}</b><br><span class="type-badge ${badgeCls[cat]||'badge-hum'}">${cat==='hum'?'Гум.':cat==='it'?'ІТ':'Мед.'}</span></td>
+      <td style="color:var(--text2)">${vol}</td>
+      <td class="price-cell">${fmt(p1)}</td>
+      <td class="price-cell">${fmt(p2)}</td>
+      <td class="price-cell">${fmt(p3)}</td>
+    </tr>`).join('');
+}
+
+// ─── CALC ────────────────────────────────────────────────
+function calc(){
+  const type=document.getElementById('sel-type').value;
+  const specMult=parseFloat(document.getElementById('sel-spec').value);
+  const urgMult=URGENCIES[selUrg].mult;
+  const uniqMult=parseFloat(document.getElementById('sel-uniq').value);
+  const disc=parseInt(document.getElementById('disc-range').value);
+  const kindMult=KINDS[selKind].mult;
+  const pages=parseInt(document.getElementById('pages-range').value);
+
+  let basePrice=BASE[type]||1000;
+  let pagesMult=1.0;
+  let perPageNote='';
+
+  // per-page types
+  if(PER_PAGE[type]){
+    basePrice=PER_PAGE[type]*pages;
+    perPageNote=`(${pages} стор. × ${PER_PAGE[type]} грн)`;
+  } else if(!NO_PAGES.includes(type)){
+    const bp=BASE_PG[type]||30;
+    if(pages>bp) pagesMult=1+(pages-bp)*0.013;
+    else if(pages<bp) pagesMult=Math.max(0.75,1-(bp-pages)*0.01);
+  }
+
+  let extrasTotal=0;
+  selExtras.forEach(id=>{const ex=EXTRAS.find(e=>e.id===id);if(ex)extrasTotal+=ex.price});
+
+  const market=Math.round(basePrice*kindMult*specMult*urgMult*uniqMult*pagesMult);
+  const withExtras=market+extrasTotal;
+  const your=Math.round(withExtras*(1-disc/100));
+
+  // display
+  animatePrice('market-price',fmt(market+(selExtras.size?extrasTotal:0)));
+  animatePrice('your-price',fmt(your));
+  document.getElementById('your-sub').textContent=disc>0?'знижка −'+disc+'%':'без знижки';
+
+  // breakdown
+  document.getElementById('bd-base').textContent=fmt(basePrice)+(perPageNote?' '+perPageNote:'');
+  document.getElementById('bd-kind').textContent=kindMult===1?'—':'×'+kindMult.toFixed(2)+' = '+fmt(basePrice*kindMult);
+  document.getElementById('bd-spec').textContent=specMult===1?'—':'×'+specMult.toFixed(2)+' = '+fmt(basePrice*kindMult*specMult);
+  document.getElementById('bd-urg').textContent=urgMult===1?'—':(urgMult<1?'':'+')+Math.round((urgMult-1)*100)+'%';
+  document.getElementById('bd-uniq').textContent=uniqMult===1?'—':'+'+Math.round((uniqMult-1)*100)+'%';
+  document.getElementById('bd-pages').textContent=PER_PAGE[type]||NO_PAGES.includes(type)?'—':'×'+pagesMult.toFixed(2);
+  document.getElementById('bd-extras').textContent=extrasTotal>0?'+'+fmt(extrasTotal)+' ('+selExtras.size+' посл.)':'—';
+  document.getElementById('bd-total').textContent=fmt(your);
+
+  // coloring
+  setValColor('bd-urg',urgMult);
+  setValColor('bd-uniq',uniqMult);
+
+  // income
+  [10,30,60,100].forEach(n=>document.getElementById('inc'+n).textContent=fmtK(your*n));
+
+  // prefill invoice
+  const descEl=document.getElementById('inv-desc');
+  if(!descEl.value||descEl.dataset.auto){
+    const t=document.getElementById('sel-type');
+    descEl.value=t.options[t.selectedIndex].text.replace(/\(.*\)/,'').trim()+', '+pages+' стор.';
+    descEl.dataset.auto='1';
+  }
+  document.getElementById('inv-amount').value=your;
+}
+
+function setValColor(id,mult){
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(mult>1.1) el.className='bd-val dn';
+  else if(mult>1.0) el.className='bd-val'+(mult>1.15?' dn':' neu');
+  else if(mult<1.0) el.className='bd-val up';
+  else el.className='bd-val neu';
+}
+
+function animatePrice(id,val){
+  const el=document.getElementById(id);
+  if(el.textContent!==val){el.textContent=val;el.style.animation='none';requestAnimationFrame(()=>el.style.animation='priceFlash .3s ease')}
+}
+
+function onTypeChange(){
+  const type=document.getElementById('sel-type').value;
+  const pg=document.getElementById('pages-card');
+  const uniq=document.getElementById('uniq-card');
+  const noP=NO_PAGES.includes(type)||PER_PAGE[type];
+  pg.style.display=noP&&!PER_PAGE[type]?'none':'block';
+  uniq.style.display=['code','db','site','app','test','prez'].includes(type)?'none':'block';
+  // set default pages
+  if(BASE_PG[type] && !noP){
+    const r=document.getElementById('pages-range');
+    r.value=BASE_PG[type];
+    document.getElementById('pages-out').textContent=r.value;
+    updateRangeTrack('pages-track','pages-range');
+  }
+  calc();
+}
+
+function onPagesChange(){
+  const r=document.getElementById('pages-range');
+  document.getElementById('pages-out').textContent=r.value;
+  updateRangeTrack('pages-track','pages-range');
+  calc();
+}
+
+function onDiscChange(){
+  const r=document.getElementById('disc-range');
+  document.getElementById('disc-out').textContent=r.value+'%';
+  updateRangeTrack('disc-track','disc-range');
+  calc();
+}
+
+function updateRangeTrack(wrapId,rangeId){
+  const wrap=document.getElementById(wrapId);
+  const range=document.getElementById(rangeId);
+  if(!wrap||!range)return;
+  const pct=((range.value-range.min)/(range.max-range.min)*100).toFixed(1)+'%';
+  wrap.style.setProperty('--fill',pct);
+}
+
+// ─── FORMAT ─────────────────────────────────────────────
+function fmt(n){return Math.round(n).toLocaleString('uk-UA')+'\u00a0грн'}
+function fmtK(n){const v=Math.round(n);return v>=1000?(v/1000).toFixed(v%1000===0?0:1)+'k\u00a0грн':v+'\u00a0грн'}
+
+// ─── TABS ────────────────────────────────────────────────
+function switchTab(i){
+  document.querySelectorAll('.tab').forEach((t,j)=>t.className='tab'+(j===i?' act':''));
+  ['tab-calc','tab-price','tab-invoice','tab-tips'].forEach((id,j)=>{
+    document.getElementById(id).className='section'+(j===i?' act':'');
+  });
+}
+
+// ─── COPY / SHARE ────────────────────────────────────────
+function copyResult(){
+  const t=document.getElementById('sel-type');
+  const type=t.options[t.selectedIndex].text;
+  const mp=document.getElementById('market-price').textContent;
+  const yp=document.getElementById('your-price').textContent;
+  const disc=parseInt(document.getElementById('disc-range').value);
+  const pages=document.getElementById('pages-range').value;
+  let txt=`📋 Вартість роботи (${new Date().toLocaleDateString('uk-UA')})\n`;
+  txt+=`Тип: ${type.replace(/\(.*\)/,'').trim()}\n`;
+  txt+=`Сторінок: ${pages}\n`;
+  txt+=`Ринкова ціна: ${mp}\n`;
+  txt+=disc>0?`Ваша ціна (−${disc}%): ${yp}`:`Ціна: ${yp}`;
+  if(selExtras.size){txt+=`\nДоп. послуги: ${[...selExtras].map(id=>EXTRAS.find(e=>e.id===id)?.label).join(', ')}`}
+  navigator.clipboard.writeText(txt).then(()=>alert('Скопійовано!')).catch(()=>{});
+}
+
+function shareCalc(){
+  const url=window.location.href;
+  if(navigator.share){navigator.share({title:'Калькулятор студ. робіт',url})}
+  else{navigator.clipboard.writeText(url).then(()=>alert('Посилання скопійовано!'))}
+}
+
+function goInvoice(){
+  switchTab(2);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── INVOICE ────────────────────────────────────────────
+function selPayment(btn,method){
+  paymentMethod=method;
+  btn.closest('.chips').querySelectorAll('.chip').forEach(c=>c.className='chip');
+  btn.className='chip sel';
+  document.getElementById('fop-iban-block').style.display=(method==='iban')?'block':'none';
+  document.getElementById('fop-link-block').style.display=(method==='link')?'block':'none';
+}
+
+function updateOrderPreview(val){
+  const el=document.getElementById('inv-order-num-preview');
+  if(el) el.textContent=val||'___';
+}
+
+function generateInvoice(){
+  const seller=document.getElementById('inv-seller').value||'ФОП Десятерик Оксана Сергіївна';
+  const buyer=document.getElementById('inv-buyer').value||'Замовник';
+  const desc=document.getElementById('inv-desc').value||'Студентська робота';
+  const amount=parseFloat(document.getElementById('inv-amount').value)||0;
+  const prepayPct=parseInt(document.getElementById('inv-prepay').value);
+  const orderNum=document.getElementById('inv-order').value||'—';
+  const payLink=document.getElementById('inv-pay-link')?document.getElementById('inv-pay-link').value:'';
+  const prepay=Math.round(amount*prepayPct/100);
+  const rest=amount-prepay;
+  const date=new Date().toLocaleDateString('uk-UA');
+  const num='INV-'+Date.now().toString().slice(-6);
+  const toPay=prepayPct===100?amount:(prepay||amount);
+  const призначення=`Оплата за інформаційно-консультаційні послуги сервісу "Kursio" згідно замовлення №${orderNum}`;
+
+  document.getElementById('inv-date-out').textContent=`№ ${num} від ${date}`;
+
+  let rekvBody='';
+  if(paymentMethod==='iban'){
+    rekvBody=`
+    <div style="background:rgba(108,99,255,.08);border:1px solid rgba(108,99,255,.25);border-radius:10px;padding:12px;margin:8px 0">
+      <div style="font-size:10px;font-weight:700;color:var(--accent3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">💳 Реквізити для оплати</div>
+      <div class="inv-row"><span style="color:var(--text2)">Одержувач:</span><span style="font-weight:600">ФОП Десятерик Оксана Сергіївна</span></div>
+      <div class="inv-row"><span style="color:var(--text2)">IBAN:</span><span style="font-family:monospace;font-size:12px;color:var(--accent3)">UA543220010000026003360042551</span></div>
+      <div class="inv-row"><span style="color:var(--text2)">ЄДРПОУ:</span><span style="font-family:monospace">2926601387</span></div>
+      <div class="inv-row"><span style="color:var(--text2)">МФО:</span><span style="font-family:monospace">322001</span></div>
+      <div class="inv-row"><span style="color:var(--text2)">Банк:</span><span>АТ «УНІВЕРСАЛ БАНК»</span></div>
+      <div class="inv-row" style="border-bottom:none"><span style="color:var(--text2)">Призначення:</span><span style="text-align:right;max-width:55%;font-size:12px;color:var(--green)">${призначення}</span></div>
+    </div>`;
+  } else if(paymentMethod==='link' && payLink){
+    rekvBody=`
+    <div style="background:rgba(34,211,165,.08);border:1px solid rgba(34,211,165,.25);border-radius:10px;padding:12px;margin:8px 0">
+      <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">🔗 Платіжне посилання</div>
+      <div class="inv-row" style="border-bottom:none"><span style="color:var(--text2)">Посилання:</span><span style="font-size:12px;color:var(--green);word-break:break-all;max-width:60%;text-align:right">${payLink}</span></div>
+    </div>`;
+  }
+
+  document.getElementById('inv-body').innerHTML=`
+    <div class="inv-row"><span>Одержувач:</span><span><b>${seller}</b></span></div>
+    <div class="inv-row"><span>Замовник:</span><span><b>${buyer}</b></span></div>
+    <div class="inv-row"><span>Послуга:</span><span style="text-align:right;max-width:55%">${desc}</span></div>
+    <div class="inv-row"><span>Загальна сума:</span><span style="color:var(--accent3);font-weight:700">${fmt(amount)}</span></div>
+    ${prepayPct>0?`<div class="inv-row"><span>Передоплата ${prepayPct}%:</span><span style="color:var(--yellow);font-weight:700">${fmt(prepay)}</span></div>
+    <div class="inv-row"><span>Залишок після здачі:</span><span style="color:var(--green);font-weight:700">${fmt(rest)}</span></div>`:''}
+    ${rekvBody}
+    <div class="inv-row" style="border-top:2px solid var(--border2);margin-top:8px;padding-top:8px;font-size:16px;font-weight:800">
+      <span>ДО СПЛАТИ:</span><span style="color:var(--green)">${fmt(toPay)}</span>
+    </div>`;
+
+  document.getElementById('invoice-output').style.display='block';
+  document.getElementById('invoice-output').scrollIntoView({behavior:'smooth'});
+}
+
+function copyInvoice(){
+  const seller=document.getElementById('inv-seller').value||'ФОП Десятерик Оксана Сергіївна';
+  const buyer=document.getElementById('inv-buyer').value||'Замовник';
+  const desc=document.getElementById('inv-desc').value||'Студентська робота';
+  const amount=parseFloat(document.getElementById('inv-amount').value)||0;
+  const prepayPct=parseInt(document.getElementById('inv-prepay').value);
+  const orderNum=document.getElementById('inv-order').value||'—';
+  const payLink=document.getElementById('inv-pay-link')?document.getElementById('inv-pay-link').value:'';
+  const prepay=Math.round(amount*prepayPct/100);
+  const rest=amount-prepay;
+  const toPay=prepayPct===100?amount:(prepay||amount);
+  const date=new Date().toLocaleDateString('uk-UA');
+  const призначення=`Оплата за інформаційно-консультаційні послуги сервісу "Kursio" згідно замовлення №${orderNum}`;
+
+  let t=`🧾 РАХУНОК НА ОПЛАТУ від ${date}\n`;
+  t+=`─────────────────────────────\n`;
+  t+=`Замовник: ${buyer}\n`;
+  t+=`Послуга: ${desc}\n`;
+  t+=`─────────────────────────────\n`;
+  t+=`💰 Загальна сума: ${amount} грн\n`;
+  if(prepayPct>0){
+    t+=`📌 Передоплата ${prepayPct}%: ${prepay} грн\n`;
+    t+=`📌 Залишок після здачі: ${rest} грн\n`;
+  }
+  t+=`─────────────────────────────\n`;
+
+  if(paymentMethod==='iban'){
+    t+=`💳 РЕКВІЗИТИ ДЛЯ ОПЛАТИ:\n`;
+    t+=`Одержувач: ФОП Десятерик Оксана Сергіївна\n`;
+    t+=`IBAN: UA543220010000026003360042551\n`;
+    t+=`ЄДРПОУ: 2926601387\n`;
+    t+=`МФО: 322001\n`;
+    t+=`Банк: АТ «УНІВЕРСАЛ БАНК»\n`;
+    t+=`Призначення: ${призначення}\n`;
+  } else if(paymentMethod==='link' && payLink){
+    t+=`🔗 ПОСИЛАННЯ ДЛЯ ОПЛАТИ:\n${payLink}\n`;
+    t+=`Призначення: ${призначення}\n`;
+  }
+
+  t+=`─────────────────────────────\n`;
+  t+=`✅ ДО СПЛАТИ: ${toPay} грн`;
+
+  navigator.clipboard.writeText(t).then(()=>alert('Рахунок скопійовано! Тепер можна надіслати клієнту.')).catch(()=>{});
+}
+
+function printInvoice(){window.print()}
+
+// ─── AI FILE UPLOAD ──────────────────────────────────────
+function setStatus(msg,cls){
+  const el=document.getElementById('ai-status');
+  el.className='ai-status show '+cls;el.innerHTML=msg;
+}
+function handleDrop(e){
+  e.preventDefault();document.getElementById('drop-zone').classList.remove('drag');
+  const f=e.dataTransfer.files[0];if(f)handleFile(f);
+}
+async function handleFile(file){
+  if(!file)return;
+  document.getElementById('drop-zone').querySelector('.up-text').textContent='📄 '+file.name;
+  document.getElementById('ai-result').className='ai-result';
+  document.getElementById('apply-btn').disabled=true;aiData=null;
+  setStatus('<i class="ti ti-loader" style="animation:spin 1s linear infinite;display:inline-block;margin-right:6px"></i>Читаю файл...','loading');
+  let text='';
+  try{
+    if(file.type==='application/pdf'||file.name.endsWith('.pdf')) text=await readPdf(file);
+    else text=await file.text();
+  }catch(e){setStatus('Не вдалося прочитати файл.','err');return}
+  if(text.length<30){setStatus('Файл порожній або захищений.','err');return}
+  setStatus('<i class="ti ti-robot" style="margin-right:6px"></i>ШІ аналізує вимоги...','loading');
+  try{
+    const result=await callAI(text.slice(0,8000));
+    aiData=result;showAiResult(result);
+    setStatus('<i class="ti ti-check" style="margin-right:6px"></i>Готово! Натисніть «Застосувати»','done');
+    document.getElementById('apply-btn').disabled=false;
+  }catch(e){setStatus('Помилка ШІ: '+e.message,'err')}
+}
+async function readPdf(file){
+  return new Promise(resolve=>{
+    const reader=new FileReader();
+    reader.onload=async e=>{
+      try{
+        if(window.pdfjsLib){
+          const pdf=await pdfjsLib.getDocument({data:e.target.result}).promise;
+          let t='';for(let i=1;i<=Math.min(pdf.numPages,8);i++){
+            const page=await pdf.getPage(i);const content=await page.getTextContent();
+            t+=content.items.map(s=>s.str).join(' ')+'\n';
+          }resolve(t);
+        }else resolve('');
+      }catch(err){resolve('')}
+    };reader.readAsArrayBuffer(file);
+  });
+}
+async function callAI(text){
+  const prompt=`Ти аналізуєш методичні рекомендації до студентської роботи. З тексту витягни:
+1. Тип роботи (есе/реферат/контрольна/курсова/бакалаврська/дипломна/магістерська/звіт/лабораторна/наукова стаття/бізнес-план)
+2. Кількість сторінок (число або діапазон)
+3. Спеціальність або предмет
+4. Вимоги до унікальності тексту (% якщо є)
+5. Термін здачі (якщо є)
+6. Практична частина / код / опитування (так/ні і що саме)
+7. Вимоги до оформлення (ДСТУ, ГОСТ, інше)
+8. Обов'язкові додаткові матеріали (презентація, доповідь тощо)
+
+Відповідай ТІЛЬКИ у форматі JSON без пояснень:
+{"type":"курсова","pages":"25-30","subject":"Економіка","uniqueness":"60%","deadline":"2 тижні","practical":"є практична з розрахунками","formatting":"ДСТУ 3008:2015","extras":"презентація PPT"}
+
+Текст методички:
+${text}`;
+  const resp=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+  });
+  if(!resp.ok)throw new Error('API '+resp.status);
+  const data=await resp.json();
+  let raw=data.content.map(c=>c.text||'').join('');
+  raw=raw.replace(/```json|```/g,'').trim();
+  return JSON.parse(raw);
+}
+function showAiResult(d){
+  const rows=[
+    ['Тип роботи',d.type||'—'],['Сторінок',d.pages||'—'],
+    ['Предмет',d.subject||'—'],['Унікальність',d.uniqueness||'—'],
+    ['Термін',d.deadline||'—'],['Практична частина',d.practical||'—'],
+    ['Оформлення',d.formatting||'—'],['Доп. матеріали',d.extras||'—'],
+  ];
+  document.getElementById('ai-fields').innerHTML=rows.map(([n,v])=>`<div class="ai-field"><span class="ai-field-name">${n}</span><span class="ai-field-val">${v}</span></div>`).join('');
+  document.getElementById('ai-result').className='ai-result show';
+}
+function applyAiResult(){
+  if(!aiData)return;const d=aiData;
+  if(d.type){
+    const t=d.type.toLowerCase();const sel=document.getElementById('sel-type');
+    if(t.includes('есе')||t.includes('стаття')&&!t.includes('наук')) sel.value='ese';
+    else if(t.includes('реферат')) sel.value='ref';
+    else if(t.includes('контрольн')) sel.value='kontr';
+    else if(t.includes('лаборатор')) sel.value='labs';
+    else if(t.includes('магіст')) sel.value='mag';
+    else if(t.includes('бакалавр')) sel.value='bak';
+    else if(t.includes('диплом')) sel.value='dipl';
+    else if(t.includes('звіт')) sel.value='zvit';
+    else if(t.includes('наукова')) sel.value='nauk';
+    else if(t.includes('бізнес')) sel.value='plan';
+    else sel.value='kurs';
+    onTypeChange();
+  }
+  if(d.pages){const nums=d.pages.match(/\d+/g);if(nums){const pg=Math.round(nums.reduce((a,b)=>+a+ +b,0)/nums.length);const r=document.getElementById('pages-range');r.value=Math.min(250,Math.max(5,pg));document.getElementById('pages-out').textContent=r.value;updateRangeTrack('pages-track','pages-range')}}
+  if(d.subject){
+    const s=d.subject.toLowerCase();const sel=document.getElementById('sel-spec');
+    if(s.includes('іт')||s.includes('комп')||s.includes('програм')) sel.value='1.30';
+    else if(s.includes('кіберб')||s.includes('мереж')) sel.value='1.25';
+    else if(s.includes('медицин')||s.includes('стомат')) sel.value='1.40';
+    else if(s.includes('фармац')) sel.value='1.35';
+    else if(s.includes('психолог')) sel.value='1.10';
+    else if(s.includes('право')||s.includes('юрид')) sel.value='1.05';
+    else if(s.includes('економ')||s.includes('фінанс')||s.includes('банк')) sel.value='1.15';
+    else if(s.includes('менедж')||s.includes('маркет')) sel.value='1.03';
+    else if(s.includes('техніч')||s.includes('електрон')) sel.value='1.20';
+    else if(s.includes('філолог')||s.includes('мов')||s.includes('переклад')) sel.value='1.08';
+  }
+  if(d.uniqueness){const u=parseInt(d.uniqueness);const sel=document.getElementById('sel-uniq');if(u>=90)sel.value='1.28';else if(u>=80)sel.value='1.18';else if(u>=70)sel.value='1.10';else if(u>=60)sel.value='1.05';else sel.value='1.02'}
+  if(d.deadline){const dl=d.deadline.toLowerCase();const sel=document.getElementById('sel-urg');if(dl.includes('1')||dl.includes('2 дні')||dl.includes('день')||dl.includes('24 год')){selUrg=3}else if(dl.includes('3')||dl.includes('4')||dl.includes('5 дн')){selUrg=2}else if(dl.includes('3 тиж')||dl.includes('місяц')){selUrg=0}else{selUrg=1}makeUrgBar()}
+  if(d.extras){const ex=d.extras.toLowerCase();if(ex.includes('презент')||ex.includes('ppt')){selExtras.add('slides');document.getElementById('ex-slides').className='extra-chip sel';document.getElementById('exck-slides').textContent='✓'}if(ex.includes('допов')||ex.includes('виступ')){selExtras.add('speech');document.getElementById('ex-speech').className='extra-chip sel';document.getElementById('exck-speech').textContent='✓'}}
+  if(d.practical){const p=d.practical.toLowerCase();const chips=document.getElementById('kind-chips').querySelectorAll('.chip');chips.forEach(c=>c.className='chip');if(p.includes('код')||p.includes('програм')){selKind=2;chips[2].className='chip sel'}else if(p.includes('опитуван')||p.includes('анкет')){selKind=3;chips[3].className='chip sel'}else if(p.includes('є')||p.includes('розрахун')){selKind=1;chips[1].className='chip sel'}else{selKind=0;chips[0].className='chip sel'}}
+  calc();
+  setStatus('<i class="ti ti-check" style="margin-right:6px"></i>Всі параметри застосовано!','done');
+}
+
+// ─── START ───────────────────────────────────────────────
+init();
+</script>
+<style>
+@media print{
+  body{background:#fff!important;color:#000!important}
+  .tabs,.hero,.card:not(.invoice-card),.section:not(#tab-invoice){display:none!important}
+  #tab-invoice{display:block!important}
+  .invoice-box{background:#fff!important;color:#000!important;border:1px solid #ccc!important;border-radius:0!important}
+  .inv-row{color:#000!important;border-color:#ddd!important}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</body>
+</html>
