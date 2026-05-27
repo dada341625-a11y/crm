@@ -2,46 +2,30 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>CRM · Облік замовлень 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
 :root{
-  --bg:#0d0d14;
-  --bg2:#13131f;
-  --bg3:#1a1a2c;
-  --card:#1e1e30;
-  --card2:#232336;
-  --border:#2a2a44;
-  --border2:#353558;
-  --accent:#6c63ff;
-  --accent2:#8b5cf6;
-  --accent3:#a78bfa;
-  --green:#22d3a5;
-  --green2:#10b981;
-  --yellow:#f59e0b;
-  --red:#f43f5e;
-  --blue:#3b82f6;
-  --orange:#f97316;
-  --text:#e8e8f8;
-  --text2:#9999bb;
-  --r:14px;
+  --bg:#0d0d14;--bg2:#13131f;--bg3:#1a1a2c;--card:#1e1e30;--card2:#232336;
+  --border:#2a2a44;--border2:#353558;--accent:#6c63ff;--accent2:#8b5cf6;--accent3:#a78bfa;
+  --green:#22d3a5;--green2:#10b981;--yellow:#f59e0b;--red:#f43f5e;--blue:#3b82f6;--orange:#f97316;
+  --text:#e8e8f8;--text2:#9999bb;--r:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px}
-button,[onclick]{cursor:pointer;touch-action:manipulation;-webkit-touch-callout:none}
-body::before{
-  content:'';position:fixed;top:0;left:0;right:0;bottom:0;
-  background:radial-gradient(ellipse 600px 400px at 20% 10%,rgba(108,99,255,.07) 0%,transparent 70%),
-             radial-gradient(ellipse 500px 300px at 80% 80%,rgba(34,211,165,.05) 0%,transparent 70%);
-  pointer-events:none;z-index:0;
-}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 600px 400px at 20% 10%,rgba(108,99,255,.07) 0%,transparent 70%),radial-gradient(ellipse 500px 300px at 80% 80%,rgba(34,211,165,.05) 0%,transparent 70%);pointer-events:none;z-index:0}
 .wrap{max-width:780px;margin:0 auto;padding:24px 14px;position:relative;z-index:1}
- 
+
+/* iOS FIX — всі кнопки реагують на дотик */
+button,a,[onclick]{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.order-item,.copy-contact,.pin-btn,.tab,.btn-sm,.btn-primary{touch-action:manipulation;cursor:pointer}
+
 /* LOCK SCREEN */
 #lock-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
 .lock-card{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:32px 28px;text-align:center;max-width:300px;width:100%}
@@ -52,12 +36,18 @@ body::before{
 .pin-dot{width:14px;height:14px;border-radius:50%;background:var(--border2);transition:all .2s}
 .pin-dot.filled{background:var(--accent)}
 .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.pin-btn{padding:14px;border-radius:12px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:18px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Syne',sans-serif}
+.pin-btn{padding:14px;border-radius:12px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:18px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Syne',sans-serif;touch-action:manipulation}
 .pin-btn:hover{border-color:var(--accent);color:var(--accent3)}
 .pin-btn.del{font-size:14px;color:var(--text2)}
 .lock-err{font-size:12px;color:var(--red);min-height:16px;text-align:center}
 .pin-setup-hint{font-size:11px;color:var(--text2);margin-top:8px}
- 
+
+/* SYNC STATUS BAR */
+#sync-status{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;margin-top:8px;transition:all .3s}
+#sync-status.connecting{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:var(--yellow)}
+#sync-status.online{background:rgba(34,211,165,.1);border:1px solid rgba(34,211,165,.3);color:var(--green)}
+#sync-status.offline{background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);color:var(--red)}
+
 /* HEADER */
 .hero{text-align:center;padding:8px 0 24px}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.3);color:var(--accent3);font-size:11px;font-weight:700;letter-spacing:.12em;padding:6px 16px;border-radius:30px;text-transform:uppercase;margin-bottom:14px}
@@ -65,56 +55,48 @@ body::before{
 .hero h1 span{background:linear-gradient(135deg,var(--accent3),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hero-sub{font-size:12px;color:var(--text2)}
 .hero-actions{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
- 
+
 /* TABS */
 .tabs{display:flex;background:var(--card);border-radius:12px;padding:5px;gap:4px;margin-bottom:14px;border:1px solid var(--border)}
-.tab{flex:1;padding:9px 4px;border-radius:9px;border:none;background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;font-family:'Inter',sans-serif}
+.tab{flex:1;padding:9px 4px;border-radius:9px;border:none;background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;font-family:'Inter',sans-serif;touch-action:manipulation}
 .tab.act{background:var(--accent);color:#fff}
 .tab:hover:not(.act){background:var(--bg3);color:var(--text)}
 .section{display:none}.section.act{display:block}
- 
+
 /* STATS BAR */
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
 .stat-card{background:var(--card);border-radius:12px;padding:14px 12px;border:1px solid var(--border);text-align:center}
 .stat-label{font-size:10px;color:var(--text2);margin-bottom:5px;font-weight:500;text-transform:uppercase;letter-spacing:.06em}
 .stat-val{font-size:18px;font-weight:800;font-family:'Syne',sans-serif}
-.stat-val.green{color:var(--green)}
-.stat-val.purple{color:var(--accent3)}
-.stat-val.yellow{color:var(--yellow)}
-.stat-val.red{color:var(--red)}
-.stat-val.orange{color:var(--orange)}
- 
+.stat-val.green{color:var(--green)}.stat-val.purple{color:var(--accent3)}.stat-val.yellow{color:var(--yellow)}.stat-val.red{color:var(--red)}.stat-val.orange{color:var(--orange)}
+
 /* CARD */
-.card{background:var(--card);border-radius:var(--r);padding:18px 18px;margin-bottom:12px;border:1px solid var(--border)}
+.card{background:var(--card);border-radius:var(--r);padding:18px;margin-bottom:12px;border:1px solid var(--border)}
 .card-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
 .card-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.card-title{font-size:13px;font-weight:600;color:var(--text2)}
-.card-title b{color:var(--text)}
+.card-title{font-size:13px;font-weight:600;color:var(--text2)}.card-title b{color:var(--text)}
 .card-actions{margin-left:auto;display:flex;gap:6px}
- 
+
 /* FORM */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .form-group{display:flex;flex-direction:column;gap:5px}
 .form-group.full{grid-column:1/-1}
 label.lbl{font-size:11px;color:var(--text2);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-input[type=text],input[type=number],input[type=date],input[type=url],select,textarea{
-  width:100%;background:var(--bg3);color:var(--text);border:1px solid var(--border2);border-radius:10px;
-  padding:10px 13px;font-size:13px;font-family:'Inter',sans-serif;-webkit-appearance:none;appearance:none;outline:none;transition:border-color .2s;
-}
+input[type=text],input[type=number],input[type=date],input[type=url],select,textarea{width:100%;background:var(--bg3);color:var(--text);border:1px solid var(--border2);border-radius:10px;padding:10px 13px;font-size:13px;font-family:'Inter',sans-serif;-webkit-appearance:none;appearance:none;outline:none;transition:border-color .2s}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238888aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
 input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 textarea{resize:vertical;min-height:60px}
- 
+
 /* BUTTONS */
-.btn-primary{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:14px;font-weight:700;padding:12px;border-radius:10px;border:none;cursor:pointer;transition:opacity .15s;font-family:'Inter',sans-serif}
+.btn-primary{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:14px;font-weight:700;padding:12px;border-radius:10px;border:none;cursor:pointer;transition:opacity .15s;font-family:'Inter',sans-serif;touch-action:manipulation}
 .btn-primary:hover{opacity:.88}
 .btn-green{background:linear-gradient(135deg,var(--green2),var(--green))}
-.btn-sm{padding:7px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.btn-sm{padding:7px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:5px;touch-action:manipulation}
 .btn-sm:hover{border-color:var(--accent);color:var(--accent3)}
 .btn-sm.danger:hover{border-color:var(--red);color:var(--red)}
 .btn-sm.success:hover{border-color:var(--green);color:var(--green)}
- 
-/* STATUS CHIPS */
+
+/* STATUS / PAY / URGENCY CHIPS */
 .status-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
 .s-new{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.3)}
 .s-work{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3)}
@@ -123,22 +105,18 @@ textarea{resize:vertical;min-height:60px}
 .s-cancel{background:rgba(244,63,94,.15);color:var(--red);border:1px solid rgba(244,63,94,.3)}
 .s-lead{background:rgba(249,115,22,.15);color:var(--orange);border:1px solid rgba(249,115,22,.3)}
 .s-repeat{background:rgba(34,211,165,.25);color:var(--green);border:1px solid rgba(34,211,165,.5)}
- 
-/* PAY CHIP */
 .pay-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
 .p-paid{background:rgba(34,211,165,.15);color:var(--green);border:1px solid rgba(34,211,165,.3)}
 .p-part{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3)}
 .p-unpaid{background:rgba(244,63,94,.15);color:var(--red);border:1px solid rgba(244,63,94,.3)}
- 
-/* URGENCY CHIP */
 .urg-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
 .urg-normal{background:rgba(59,130,246,.1);color:#60a5fa;border:1px solid rgba(59,130,246,.25)}
 .urg-hot{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3)}
 .urg-fire{background:rgba(244,63,94,.15);color:var(--red);border:1px solid rgba(244,63,94,.3)}
- 
+
 /* ORDER LIST */
 .order-list{display:flex;flex-direction:column;gap:8px}
-.order-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .2s}
+.order-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .2s;touch-action:manipulation}
 .order-item:hover{border-color:var(--border2);background:var(--card2)}
 .order-item.selected{border-color:var(--accent);background:rgba(108,99,255,.06)}
 .oi-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
@@ -149,7 +127,7 @@ textarea{resize:vertical;min-height:60px}
 .oi-profit{font-size:11px;color:var(--green);font-weight:600}
 .oi-bottom{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .oi-contact{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:3px}
- 
+
 /* DETAIL PANEL */
 .detail-panel{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:18px;margin-bottom:12px}
 .dp-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)}
@@ -160,66 +138,60 @@ textarea{resize:vertical;min-height:60px}
 .dp-section-title{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .dp-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
 .dp-row:last-child{border-bottom:none}
-.dp-key{color:var(--text2)}
-.dp-val{color:var(--text);font-weight:500;text-align:right;max-width:60%}
- 
-/* FINANCE PANEL */
+.dp-key{color:var(--text2)}.dp-val{color:var(--text);font-weight:500;text-align:right;max-width:60%}
+
+/* FINANCE */
 .fin-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
 .fin-cell{background:var(--bg3);border-radius:10px;padding:12px;border:1px solid var(--border);text-align:center}
 .fin-label{font-size:10px;color:var(--text2);margin-bottom:4px;font-weight:500}
 .fin-val{font-size:16px;font-weight:800;font-family:'Syne',sans-serif}
-.fin-green{color:var(--green)}
-.fin-yellow{color:var(--yellow)}
-.fin-red{color:var(--red)}
-.fin-purple{color:var(--accent3)}
-.fin-orange{color:var(--orange)}
- 
+.fin-green{color:var(--green)}.fin-yellow{color:var(--yellow)}.fin-red{color:var(--red)}.fin-purple{color:var(--accent3)}.fin-orange{color:var(--orange)}
+
 /* SEARCH */
 .search-wrap{position:relative;margin-bottom:10px}
 .search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:16px}
 .search-wrap input{padding-left:36px}
 .filter-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
- 
+
 /* PROGRESS BAR */
 .progress-bar{height:6px;border-radius:3px;background:var(--border2);overflow:hidden;margin-top:4px}
 .progress-fill{height:100%;border-radius:3px;transition:width .4s ease;background:linear-gradient(90deg,var(--green2),var(--green))}
- 
+
 /* EMPTY */
 .empty-state{text-align:center;padding:40px 20px;color:var(--text2)}
 .empty-icon{font-size:40px;margin-bottom:10px;color:var(--border2)}
 .empty-text{font-size:14px}
- 
+
 /* PAY PROGRESS */
 .pay-progress{background:var(--bg3);border-radius:10px;padding:12px;border:1px solid var(--border);margin-top:8px}
 .pp-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
-.pp-label{color:var(--text2)}
-.pp-val{font-weight:700}
- 
+.pp-label{color:var(--text2)}.pp-val{font-weight:700}
+
 /* COPY BTN */
-.copy-contact{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.25);color:var(--accent3);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s}
+.copy-contact{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.25);color:var(--accent3);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;touch-action:manipulation}
 .copy-contact:hover{background:rgba(108,99,255,.2)}
- 
+
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card2);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:9998;transition:transform .3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.ok{border-color:rgba(34,211,165,.4);color:var(--green)}
 .toast.err{border-color:rgba(244,63,94,.4);color:var(--red)}
- 
+
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:900;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
 .modal{background:var(--card);border-radius:16px;border:1px solid var(--border2);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:22px}
 .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .modal-title{font-size:16px;font-weight:700;font-family:'Syne',sans-serif;color:var(--text)}
-.modal-close{background:none;border:none;color:var(--text2);cursor:pointer;font-size:20px;padding:2px}
+.modal-close{background:none;border:none;color:var(--text2);cursor:pointer;font-size:20px;padding:2px;touch-action:manipulation}
 .modal-close:hover{color:var(--text)}
- 
+
 /* NEXT CONTACT BADGE */
 .next-contact-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:var(--orange);font-size:11px;font-weight:600}
- 
+
 /* SOURCE BADGE */
 .src-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#60a5fa}
- 
+
 @media(max-width:500px){
   .stats-bar{grid-template-columns:1fr 1fr}
   .form-grid{grid-template-columns:1fr}
@@ -233,8 +205,8 @@ textarea{resize:vertical;min-height:60px}
 </style>
 </head>
 <body>
- 
-<!-- ===== LOCK SCREEN ===== -->
+
+<!-- LOCK SCREEN -->
 <div id="lock-screen">
   <div class="lock-card">
     <div class="lock-icon"><i class="ti ti-lock"></i></div>
@@ -263,27 +235,27 @@ textarea{resize:vertical;min-height:60px}
     <div class="pin-setup-hint" id="pin-hint"></div>
   </div>
 </div>
- 
-<!-- ===== MAIN APP ===== -->
+
+<!-- MAIN APP -->
 <div class="wrap" id="main-app" style="display:none">
- 
+
 <div class="hero">
   <div class="hero-badge"><i class="ti ti-address-book"></i> CRM</div>
   <h1>Облік <span>замовлень</span></h1>
   <p class="hero-sub">Клієнти · Фінанси · Прибуток · Всі дані в одному місці</p>
-  <p style="margin-top:6px;font-size:12px" id="sync-status">☁️ Хмара активна</p>
   <div class="hero-actions">
     <button class="btn-sm" onclick="exportCSV()"><i class="ti ti-table-export"></i> Експорт CSV</button>
     <button class="btn-sm" onclick="importCSV()"><i class="ti ti-table-import"></i> Імпорт CSV</button>
     <button class="btn-sm" onclick="lockApp()"><i class="ti ti-lock"></i> Заблокувати</button>
     <button class="btn-sm" onclick="changePin()"><i class="ti ti-key"></i> Змінити PIN</button>
   </div>
+  <div id="sync-status" class="connecting"><i class="ti ti-cloud"></i> <span id="sync-text">Підключення до хмари...</span></div>
   <input type="file" id="csv-import-input" accept=".csv" style="display:none" onchange="handleCSVImport(event)">
 </div>
- 
+
 <!-- STATS BAR -->
 <div class="stats-bar" id="stats-bar"></div>
- 
+
 <!-- TABS -->
 <div class="tabs">
   <button class="tab act" onclick="switchTab(0)"><i class="ti ti-list" style="font-size:14px"></i> Замовлення</button>
@@ -291,8 +263,8 @@ textarea{resize:vertical;min-height:60px}
   <button class="tab" onclick="switchTab(2)"><i class="ti ti-users" style="font-size:14px"></i> Клієнти</button>
   <button class="tab" onclick="switchTab(3)"><i class="ti ti-chart-bar" style="font-size:14px"></i> Аналітика</button>
 </div>
- 
-<!-- ===== TAB: СПИСОК ===== -->
+
+<!-- TAB: СПИСОК -->
 <div class="section act" id="tab-list">
   <div class="search-wrap">
     <i class="ti ti-search"></i>
@@ -308,171 +280,88 @@ textarea{resize:vertical;min-height:60px}
   </div>
   <div id="order-list"></div>
 </div>
- 
-<!-- ===== TAB: НОВЕ ЗАМОВЛЕННЯ ===== -->
+
+<!-- TAB: НОВЕ ЗАМОВЛЕННЯ -->
 <div class="section" id="tab-new">
- 
-  <!-- Блок 1: Контакти -->
   <div class="card">
     <div class="card-head">
       <div class="card-num" style="background:linear-gradient(135deg,var(--green2),var(--green))"><i class="ti ti-user-plus" style="font-size:12px"></i></div>
       <div class="card-title"><b>Контакти клієнта</b></div>
     </div>
     <div class="form-grid">
-      <div class="form-group">
-        <label class="lbl">Ім'я клієнта *</label>
-        <input type="text" id="f-client-name" placeholder="Ім'я або Ім'я + Прізвище">
-      </div>
-      <div class="form-group">
-        <label class="lbl">Телефон</label>
-        <input type="text" id="f-phone" placeholder="+380...">
-      </div>
-      <div class="form-group">
-        <label class="lbl"><i class="ti ti-brand-instagram" style="font-size:13px"></i> Instagram</label>
-        <input type="text" id="f-insta" placeholder="@username">
-      </div>
-      <div class="form-group">
-        <label class="lbl"><i class="ti ti-brand-telegram" style="font-size:13px"></i> Telegram</label>
-        <input type="text" id="f-tg" placeholder="@username або +380...">
-      </div>
-      <div class="form-group">
-        <label class="lbl">Email</label>
-        <input type="text" id="f-email" placeholder="email@gmail.com">
-      </div>
-      <div class="form-group">
-        <label class="lbl">Університет / Місто</label>
-        <input type="text" id="f-uni" placeholder="КНУ, Дніпро...">
-      </div>
+      <div class="form-group"><label class="lbl">Ім'я клієнта *</label><input type="text" id="f-client-name" placeholder="Ім'я або Ім'я + Прізвище"></div>
+      <div class="form-group"><label class="lbl">Телефон</label><input type="text" id="f-phone" placeholder="+380..."></div>
+      <div class="form-group"><label class="lbl"><i class="ti ti-brand-instagram" style="font-size:13px"></i> Instagram</label><input type="text" id="f-insta" placeholder="@username"></div>
+      <div class="form-group"><label class="lbl"><i class="ti ti-brand-telegram" style="font-size:13px"></i> Telegram</label><input type="text" id="f-tg" placeholder="@username або +380..."></div>
+      <div class="form-group"><label class="lbl">Email</label><input type="text" id="f-email" placeholder="email@gmail.com"></div>
+      <div class="form-group"><label class="lbl">Університет / Місто</label><input type="text" id="f-uni" placeholder="КНУ, Дніпро..."></div>
     </div>
   </div>
- 
-  <!-- Блок 2: Деталі -->
+
   <div class="card">
     <div class="card-head">
       <div class="card-num">2</div>
       <div class="card-title"><b>Деталі замовлення</b></div>
     </div>
     <div class="form-grid">
-      <div class="form-group">
-        <label class="lbl">Тип роботи *</label>
+      <div class="form-group"><label class="lbl">Тип роботи *</label>
         <select id="f-type">
-          <option value="Курсова">Курсова робота</option>
-          <option value="Дипломна">Дипломна робота</option>
-          <option value="Магістерська">Магістерська</option>
-          <option value="Бакалаврська">Бакалаврська</option>
-          <option value="Реферат">Реферат</option>
-          <option value="Контрольна">Контрольна</option>
-          <option value="Есе">Есе / Стаття</option>
-          <option value="Лабораторна">Лабораторна</option>
-          <option value="Звіт">Звіт з практики</option>
-          <option value="Дисертація">Дисертація PhD</option>
-          <option value="Наукова стаття">Наукова стаття</option>
-          <option value="Презентація">Презентація</option>
-          <option value="Код">Програмний код</option>
-          <option value="Переклад">Переклад</option>
+          <option value="Курсова">Курсова робота</option><option value="Дипломна">Дипломна робота</option>
+          <option value="Магістерська">Магістерська</option><option value="Бакалаврська">Бакалаврська</option>
+          <option value="Реферат">Реферат</option><option value="Контрольна">Контрольна</option>
+          <option value="Есе">Есе / Стаття</option><option value="Лабораторна">Лабораторна</option>
+          <option value="Звіт">Звіт з практики</option><option value="Дисертація">Дисертація PhD</option>
+          <option value="Наукова стаття">Наукова стаття</option><option value="Презентація">Презентація</option>
+          <option value="Код">Програмний код</option><option value="Переклад">Переклад</option>
           <option value="Інше">Інше</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="lbl">Предмет / Спеціальність</label>
-        <input type="text" id="f-subject" placeholder="Маркетинг, Право...">
-      </div>
-      <div class="form-group">
-        <label class="lbl">Кількість сторінок</label>
-        <input type="number" id="f-pages" placeholder="30" min="1">
-      </div>
-      <div class="form-group">
-        <label class="lbl">Дедлайн клієнта</label>
-        <input type="date" id="f-deadline">
-      </div>
-      <div class="form-group">
-        <label class="lbl">⚡ Терміновість</label>
+      <div class="form-group"><label class="lbl">Предмет / Спеціальність</label><input type="text" id="f-subject" placeholder="Маркетинг, Право..."></div>
+      <div class="form-group"><label class="lbl">Кількість сторінок</label><input type="number" id="f-pages" placeholder="30" min="1"></div>
+      <div class="form-group"><label class="lbl">Дедлайн клієнта</label><input type="date" id="f-deadline"></div>
+      <div class="form-group"><label class="lbl">⚡ Терміновість</label>
         <select id="f-urgency">
-          <option value="normal">Звичайне</option>
-          <option value="hot">Термінове (+доплата)</option>
-          <option value="fire">🔥 Дуже термінове</option>
+          <option value="normal">Звичайне</option><option value="hot">Термінове (+доплата)</option><option value="fire">🔥 Дуже термінове</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="lbl">📍 Джерело клієнта</label>
+      <div class="form-group"><label class="lbl">📍 Джерело клієнта</label>
         <select id="f-source">
-          <option value="">— не вказано —</option>
-          <option value="Instagram">Instagram</option>
-          <option value="TikTok">TikTok</option>
-          <option value="Telegram">Telegram-канал</option>
-          <option value="Рекомендація">Рекомендація</option>
-          <option value="Таргет">Таргетована реклама</option>
-          <option value="Сайт">Сайт / SEO</option>
-          <option value="Інше">Інше</option>
+          <option value="">— не вказано —</option><option value="Instagram">Instagram</option><option value="TikTok">TikTok</option>
+          <option value="Telegram">Telegram-канал</option><option value="Рекомендація">Рекомендація</option>
+          <option value="Таргет">Таргетована реклама</option><option value="Сайт">Сайт / SEO</option><option value="Інше">Інше</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="lbl">🔄 Етап продажу</label>
+      <div class="form-group"><label class="lbl">🔄 Етап продажу</label>
         <select id="f-stage">
-          <option value="lead">Написав — ціна не озвучена</option>
-          <option value="quoted">Отримав ціну — думає</option>
-          <option value="new">Оплатив / Підтвердив</option>
-          <option value="work">В роботі у виконавця</option>
-          <option value="wait">Здано — очікує перевірки</option>
-          <option value="done">Готово — здано клієнту</option>
-          <option value="repeat">Повторне замовлення</option>
-          <option value="cancel">Скасовано</option>
+          <option value="lead">Написав — ціна не озвучена</option><option value="quoted">Отримав ціну — думає</option>
+          <option value="new">Оплатив / Підтвердив</option><option value="work">В роботі у виконавця</option>
+          <option value="wait">Здано — очікує перевірки</option><option value="done">Готово — здано клієнту</option>
+          <option value="repeat">Повторне замовлення</option><option value="cancel">Скасовано</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="lbl">📅 Наступний контакт</label>
-        <input type="date" id="f-next-contact">
-      </div>
-      <div class="form-group full">
-        <label class="lbl">Опис / Вимоги</label>
-        <textarea id="f-desc" placeholder="Тема роботи, особливості, вимоги до унікальності..."></textarea>
-      </div>
-      <div class="form-group full">
-        <label class="lbl">🔗 Посилання на файли (Google Drive / Telegram)</label>
-        <input type="url" id="f-filelink" placeholder="https://drive.google.com/...">
-      </div>
+      <div class="form-group"><label class="lbl">📅 Наступний контакт</label><input type="date" id="f-next-contact"></div>
+      <div class="form-group full"><label class="lbl">Опис / Вимоги</label><textarea id="f-desc" placeholder="Тема роботи, особливості, вимоги до унікальності..."></textarea></div>
+      <div class="form-group full"><label class="lbl">🔗 Посилання на файли (Google Drive / Telegram)</label><input type="url" id="f-filelink" placeholder="https://drive.google.com/..."></div>
     </div>
   </div>
- 
-  <!-- Блок 3: Фінанси -->
+
   <div class="card">
     <div class="card-head">
       <div class="card-num" style="background:linear-gradient(135deg,#f59e0b,#f97316)"><i class="ti ti-currency-hryvnia" style="font-size:12px"></i></div>
       <div class="card-title"><b>Фінанси та виконавець</b></div>
     </div>
     <div class="form-grid">
-      <div class="form-group">
-        <label class="lbl">Загальна сума (грн) *</label>
-        <input type="number" id="f-total" placeholder="1500" min="0" oninput="updatePayCalc()">
-      </div>
-      <div class="form-group">
-        <label class="lbl">Передоплата (грн)</label>
-        <input type="number" id="f-prepay" placeholder="700" min="0" oninput="updatePayCalc()">
-      </div>
-      <div class="form-group">
-        <label class="lbl">Статус оплати</label>
+      <div class="form-group"><label class="lbl">Загальна сума (грн) *</label><input type="number" id="f-total" placeholder="1500" min="0" oninput="updatePayCalc()"></div>
+      <div class="form-group"><label class="lbl">Передоплата (грн)</label><input type="number" id="f-prepay" placeholder="700" min="0" oninput="updatePayCalc()"></div>
+      <div class="form-group"><label class="lbl">Статус оплати</label>
         <select id="f-pay-status">
-          <option value="unpaid">Не оплачено</option>
-          <option value="part">Часткова оплата</option>
-          <option value="paid">Повністю оплачено</option>
+          <option value="unpaid">Не оплачено</option><option value="part">Часткова оплата</option><option value="paid">Повністю оплачено</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="lbl">✍️ Виконавець</label>
-        <input type="text" id="f-executor" placeholder="Ім'я або нікнейм">
-      </div>
-      <div class="form-group">
-        <label class="lbl">💸 Собівартість (грн)</label>
-        <input type="number" id="f-cost" placeholder="800" min="0" oninput="updatePayCalc()">
-      </div>
-      <div class="form-group">
-        <label class="lbl">📊 Чистий прибуток</label>
-        <input type="text" id="f-profit-preview" placeholder="авто" readonly style="color:var(--green);font-weight:700">
-      </div>
-      <div class="form-group full">
-        <label class="lbl">Нотатки (внутрішні)</label>
-        <textarea id="f-notes" placeholder="Особисті нотатки, проблеми, нагадування..."></textarea>
-      </div>
+      <div class="form-group"><label class="lbl">✍️ Виконавець</label><input type="text" id="f-executor" placeholder="Ім'я або нікнейм"></div>
+      <div class="form-group"><label class="lbl">💸 Собівартість (грн)</label><input type="number" id="f-cost" placeholder="800" min="0" oninput="updatePayCalc()"></div>
+      <div class="form-group"><label class="lbl">📊 Чистий прибуток</label><input type="text" id="f-profit-preview" placeholder="авто" readonly style="color:var(--green);font-weight:700"></div>
+      <div class="form-group full"><label class="lbl">Нотатки (внутрішні)</label><textarea id="f-notes" placeholder="Особисті нотатки, проблеми, нагадування..."></textarea></div>
     </div>
     <div id="pay-calc" style="display:none;margin-top:10px">
       <div class="pay-progress">
@@ -485,13 +374,10 @@ textarea{resize:vertical;min-height:60px}
       </div>
     </div>
   </div>
- 
-  <button class="btn-primary" onclick="saveOrder()" id="save-btn">
-    <i class="ti ti-device-floppy" style="margin-right:6px"></i> Зберегти замовлення
-  </button>
+  <button class="btn-primary" onclick="saveOrder()" id="save-btn"><i class="ti ti-device-floppy" style="margin-right:6px"></i> Зберегти замовлення</button>
 </div>
- 
-<!-- ===== TAB: КЛІЄНТИ ===== -->
+
+<!-- TAB: КЛІЄНТИ -->
 <div class="section" id="tab-clients">
   <div class="search-wrap">
     <i class="ti ti-search"></i>
@@ -499,14 +385,14 @@ textarea{resize:vertical;min-height:60px}
   </div>
   <div id="client-list"></div>
 </div>
- 
-<!-- ===== TAB: АНАЛІТИКА ===== -->
+
+<!-- TAB: АНАЛІТИКА -->
 <div class="section" id="tab-analytics">
   <div id="analytics-content"></div>
 </div>
- 
+
 </div><!-- /wrap -->
- 
+
 <!-- DETAIL MODAL -->
 <div class="modal-overlay" id="detail-modal">
   <div class="modal">
@@ -517,11 +403,13 @@ textarea{resize:vertical;min-height:60px}
     <div id="modal-body"></div>
   </div>
 </div>
- 
+
 <div class="toast" id="toast"></div>
- 
+
 <script>
-// ─── FIREBASE INIT ─────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+// FIREBASE INIT
+// ═══════════════════════════════════════════════════════════
 const firebaseConfig = {
   apiKey: "AIzaSyCzox28C7ER_nnfs-kAW_eAtTRYZb6TcZo",
   authDomain: "crm-zamovlennya.firebaseapp.com",
@@ -531,225 +419,199 @@ const firebaseConfig = {
   messagingSenderId: "68434112428",
   appId: "1:68434112428:web:4f9ef178d177b7074e1409"
 };
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
- 
-// ─── SAFE STORAGE (localStorage fallback) ─────────────────
+const ordersRef = db.ref('orders');
+const pinRef = db.ref('pin');
+
+// Sync status
+const syncEl = document.getElementById('sync-status');
+const syncText = document.getElementById('sync-text');
+
+db.ref('.info/connected').on('value', snap => {
+  if(snap.val()){
+    syncEl.className=''; syncEl.classList.add('online');
+    syncEl.querySelector('i').className='ti ti-cloud-check';
+    syncText.textContent='Синхронізовано з хмарою ✓';
+  } else {
+    syncEl.className=''; syncEl.classList.add('offline');
+    syncEl.querySelector('i').className='ti ti-cloud-off';
+    syncText.textContent='Офлайн — дані збережені локально';
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// STORAGE — localStorage як кеш + Firebase як джерело правди
+// ═══════════════════════════════════════════════════════════
 const _store = (()=>{
-  const mem = {};
-  let ls = null;
-  try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); ls = localStorage; } catch(e) {}
-  return {
-    get(k){ try{ return ls ? ls.getItem(k) : (k in mem ? mem[k] : null); }catch(e){ return k in mem ? mem[k] : null; } },
-    set(k,v){ try{ if(ls) ls.setItem(k,v); else mem[k]=v; }catch(e){ mem[k]=v; } },
-    remove(k){ try{ if(ls) ls.removeItem(k); else delete mem[k]; }catch(e){ delete mem[k]; } }
+  const mem={};let ls=null;
+  try{localStorage.setItem('__t','1');localStorage.removeItem('__t');ls=localStorage}catch(e){}
+  return{
+    get(k){try{return ls?ls.getItem(k):(k in mem?mem[k]:null)}catch(e){return k in mem?mem[k]:null}},
+    set(k,v){try{if(ls)ls.setItem(k,v);else mem[k]=v}catch(e){mem[k]=v}},
+    remove(k){try{if(ls)ls.removeItem(k);else delete mem[k]}catch(e){delete mem[k]}}
   };
 })();
-</script>
-<script>
-// ─── PIN / LOCK ────────────────────────────────────────────
-const PIN_KEY = 'crm_pin_v1';
-let pinBuffer = '';
-let pinMode = 'check'; // 'check' | 'setup' | 'setup2' | 'change1' | 'change2' | 'change3'
-let pinTemp = '';
- 
-function getSavedPin(){ return _store.get(PIN_KEY); }
- 
-function initLock(){
-  const saved = getSavedPin();
-  if(!saved){
-    pinMode = 'setup';
-    document.getElementById('lock-title').textContent = 'Встановіть PIN';
-    document.getElementById('lock-sub').textContent = 'Введіть новий 4-значний PIN';
-    document.getElementById('pin-hint').textContent = 'PIN захищає ваші дані від чужих очей';
+
+const PIN_KEY='crm_pin_v1';
+const STORE_KEY='crm_orders_cache';
+
+let orders=[];
+try{orders=JSON.parse(_store.get(STORE_KEY)||'[]')}catch(e){}
+let currentFilter='all';
+let editingId=null;
+
+// Save to Firebase + local cache
+function saveOrders(arr){
+  _store.set(STORE_KEY,JSON.stringify(arr));
+  // Save to Firebase as object keyed by id
+  const obj={};
+  arr.forEach(o=>{ obj[o.id.replace(/[.#$[\]]/g,'_')]=o; });
+  ordersRef.set(obj).catch(err=>console.warn('Firebase save error:',err));
+}
+
+// Listen to Firebase in realtime
+ordersRef.on('value', snap=>{
+  const data=snap.val();
+  if(data){
+    orders=Object.values(data).sort((a,b)=>b.createdAt-a.createdAt);
+    _store.set(STORE_KEY,JSON.stringify(orders));
   } else {
-    pinMode = 'check';
-    document.getElementById('lock-title').textContent = 'CRM · Захищено';
-    document.getElementById('lock-sub').textContent = 'Введіть PIN для входу';
+    orders=[];
+    _store.set(STORE_KEY,'[]');
+  }
+  renderList();
+  renderStats();
+});
+
+// ═══════════════════════════════════════════════════════════
+// PIN / LOCK
+// ═══════════════════════════════════════════════════════════
+let pinBuffer='';
+let pinMode='check';
+let pinTemp='';
+
+function getSavedPin(){
+  return _store.get(PIN_KEY);
+}
+function setSavedPin(pin){
+  _store.set(PIN_KEY,pin);
+  pinRef.set(pin).catch(()=>{});
+}
+
+// Try load pin from Firebase on first run
+pinRef.once('value').then(snap=>{
+  if(snap.val()&&!_store.get(PIN_KEY)){
+    _store.set(PIN_KEY,snap.val());
+  }
+  initLock();
+}).catch(()=>{ initLock(); });
+
+function initLock(){
+  const saved=getSavedPin();
+  if(!saved){
+    pinMode='setup';
+    document.getElementById('lock-title').textContent='Встановіть PIN';
+    document.getElementById('lock-sub').textContent='Введіть новий 4-значний PIN';
+    document.getElementById('pin-hint').textContent='PIN захищає ваші дані від чужих очей';
+  } else {
+    pinMode='check';
+    document.getElementById('lock-title').textContent='CRM · Захищено';
+    document.getElementById('lock-sub').textContent='Введіть PIN для входу';
   }
 }
- 
+
 function pinPress(d){
-  if(pinBuffer.length >= 4) return;
-  pinBuffer += d;
+  if(pinBuffer.length>=4)return;
+  pinBuffer+=d;
   updateDots();
-  if(pinBuffer.length === 4) setTimeout(handlePin, 120);
+  if(pinBuffer.length===4)setTimeout(handlePin,120);
 }
-function pinDel(){
-  pinBuffer = pinBuffer.slice(0,-1);
-  updateDots();
-}
+function pinDel(){pinBuffer=pinBuffer.slice(0,-1);updateDots()}
 function updateDots(){
-  for(let i=0;i<4;i++){
-    document.getElementById('d'+i).classList.toggle('filled', i < pinBuffer.length);
-  }
+  for(let i=0;i<4;i++)document.getElementById('d'+i).classList.toggle('filled',i<pinBuffer.length);
 }
 function pinError(msg){
-  const err = document.getElementById('lock-err');
-  err.textContent = msg;
-  const card = document.querySelector('.lock-card');
-  card.classList.remove('shake');
-  void card.offsetWidth;
-  card.classList.add('shake');
-  pinBuffer = '';
-  updateDots();
+  const err=document.getElementById('lock-err');
+  err.textContent=msg;
+  const card=document.querySelector('.lock-card');
+  card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');
+  pinBuffer='';updateDots();
 }
 function handlePin(){
-  const pin = pinBuffer;
-  pinBuffer = '';
-  updateDots();
- 
-  if(pinMode === 'check'){
-    if(pin === getSavedPin()){
-      unlockApp();
-    } else {
-      pinError('Невірний PIN. Спробуйте ще раз.');
-    }
-  } else if(pinMode === 'setup'){
-    pinTemp = pin;
-    pinMode = 'setup2';
-    document.getElementById('lock-sub').textContent = 'Повторіть PIN для підтвердження';
-    document.getElementById('lock-err').textContent = '';
-  } else if(pinMode === 'setup2'){
-    if(pin === pinTemp){
-      _store.set(PIN_KEY, pin);
-      unlockApp();
-    } else {
-      pinMode = 'setup';
-      pinTemp = '';
-      pinError('PINи не співпадають. Спробуйте знову.');
-      document.getElementById('lock-sub').textContent = 'Введіть новий 4-значний PIN';
-    }
-  } else if(pinMode === 'change1'){
-    if(pin === getSavedPin()){
-      pinMode = 'change2';
-      pinTemp = '';
-      document.getElementById('lock-sub').textContent = 'Введіть новий PIN';
-      document.getElementById('lock-err').textContent = '';
-    } else {
-      pinError('Невірний поточний PIN');
-    }
-  } else if(pinMode === 'change2'){
-    pinTemp = pin;
-    pinMode = 'change3';
-    document.getElementById('lock-sub').textContent = 'Повторіть новий PIN';
-    document.getElementById('lock-err').textContent = '';
-  } else if(pinMode === 'change3'){
-    if(pin === pinTemp){
-      _store.set(PIN_KEY, pin);
-      document.getElementById('lock-screen').style.display = 'none';
-      document.getElementById('main-app').style.display = 'block';
-      toast('PIN успішно змінено ✓', 'ok');
-    } else {
-      pinMode = 'change2';
-      pinTemp = '';
-      pinError('PINи не співпадають. Спробуйте знову.');
-      document.getElementById('lock-sub').textContent = 'Введіть новий PIN';
-    }
+  const pin=pinBuffer;pinBuffer='';updateDots();
+  if(pinMode==='check'){
+    if(pin===getSavedPin()){unlockApp()}else{pinError('Невірний PIN. Спробуйте ще раз.')}
+  }else if(pinMode==='setup'){
+    pinTemp=pin;pinMode='setup2';
+    document.getElementById('lock-sub').textContent='Повторіть PIN для підтвердження';
+    document.getElementById('lock-err').textContent='';
+  }else if(pinMode==='setup2'){
+    if(pin===pinTemp){setSavedPin(pin);unlockApp()}
+    else{pinMode='setup';pinTemp='';pinError('PINи не співпадають. Спробуйте знову.');document.getElementById('lock-sub').textContent='Введіть новий 4-значний PIN'}
+  }else if(pinMode==='change1'){
+    if(pin===getSavedPin()){pinMode='change2';pinTemp='';document.getElementById('lock-sub').textContent='Введіть новий PIN';document.getElementById('lock-err').textContent=''}
+    else{pinError('Невірний поточний PIN')}
+  }else if(pinMode==='change2'){
+    pinTemp=pin;pinMode='change3';document.getElementById('lock-sub').textContent='Повторіть новий PIN';document.getElementById('lock-err').textContent='';
+  }else if(pinMode==='change3'){
+    if(pin===pinTemp){setSavedPin(pin);document.getElementById('lock-screen').style.display='none';document.getElementById('main-app').style.display='block';toast('PIN успішно змінено ✓','ok')}
+    else{pinMode='change2';pinTemp='';pinError('PINи не співпадають. Спробуйте знову.');document.getElementById('lock-sub').textContent='Введіть новий PIN'}
   }
 }
 function unlockApp(){
-  document.getElementById('lock-screen').style.display = 'none';
-  document.getElementById('main-app').style.display = 'block';
-  document.getElementById('lock-err').textContent = '';
+  document.getElementById('lock-screen').style.display='none';
+  document.getElementById('main-app').style.display='block';
+  document.getElementById('lock-err').textContent='';
 }
 function lockApp(){
-  document.getElementById('main-app').style.display = 'none';
-  document.getElementById('lock-screen').style.display = 'flex';
-  pinMode = 'check';
-  pinBuffer = '';
-  updateDots();
-  document.getElementById('lock-title').textContent = 'CRM · Захищено';
-  document.getElementById('lock-sub').textContent = 'Введіть PIN для входу';
-  document.getElementById('lock-err').textContent = '';
+  document.getElementById('main-app').style.display='none';
+  document.getElementById('lock-screen').style.display='flex';
+  pinMode='check';pinBuffer='';updateDots();
+  document.getElementById('lock-title').textContent='CRM · Захищено';
+  document.getElementById('lock-sub').textContent='Введіть PIN для входу';
+  document.getElementById('lock-err').textContent='';
 }
 function changePin(){
-  document.getElementById('main-app').style.display = 'none';
-  document.getElementById('lock-screen').style.display = 'flex';
-  pinMode = 'change1';
-  pinBuffer = '';
-  updateDots();
-  document.getElementById('lock-title').textContent = 'Зміна PIN';
-  document.getElementById('lock-sub').textContent = 'Введіть поточний PIN';
-  document.getElementById('lock-err').textContent = '';
-  document.getElementById('pin-hint').textContent = '';
+  document.getElementById('main-app').style.display='none';
+  document.getElementById('lock-screen').style.display='flex';
+  pinMode='change1';pinBuffer='';updateDots();
+  document.getElementById('lock-title').textContent='Зміна PIN';
+  document.getElementById('lock-sub').textContent='Введіть поточний PIN';
+  document.getElementById('lock-err').textContent='';
+  document.getElementById('pin-hint').textContent='';
 }
- 
-// ─── FIREBASE STORAGE ─────────────────────────────────────
-const STORE_KEY = 'crm_orders_v3';
-const FB_PATH = 'orders';
- 
-function loadOrders(){
-  try{ return JSON.parse(_store.get(STORE_KEY)||'[]') }catch(e){ return[] }
-}
-function saveOrders(arr){
-  // Зберігаємо локально (миттєво)
-  _store.set(STORE_KEY, JSON.stringify(arr));
-  // Зберігаємо в Firebase (синхронізація між пристроями)
-  db.ref(FB_PATH).set(arr).catch(()=>{});
-}
- 
-// Слухаємо зміни з Firebase — оновлюємо якщо інший пристрій змінив дані
-db.ref(FB_PATH).on('value', snap => {
-  const data = snap.val();
-  if(!data || !Array.isArray(data)) return;
-  const localStr = _store.get(STORE_KEY)||'[]';
-  // Оновлюємо тільки якщо дані відрізняються
-  if(JSON.stringify(data) !== localStr){
-    _store.set(STORE_KEY, JSON.stringify(data));
-    orders = data;
-    renderList();
-    renderStats();
-    showSyncBadge();
-  }
-});
- 
-function showSyncBadge(){
-  const el = document.getElementById('sync-status');
-  if(!el) return;
-  el.textContent = '🔄 Синхронізовано';
-  el.style.color = 'var(--green)';
-  setTimeout(()=>{ el.textContent = '☁️ Хмара активна'; el.style.color=''; }, 2000);
-}
- 
-let orders = loadOrders();
-let currentFilter = 'all';
-let editingId = null;
- 
-// ─── UTILS ────────────────────────────────────────────────
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7) }
-function fmt(n){ return Number(n).toLocaleString('uk-UA')+'₴' }
-function fmtDate(d){ if(!d)return'—'; const dt=new Date(d); return dt.toLocaleDateString('uk-UA',{day:'2-digit',month:'2-digit',year:'numeric'}) }
-function initials(name){ if(!name)return'?'; const p=name.trim().split(' '); return p.length>=2?p[0][0]+p[1][0]:name.slice(0,2).toUpperCase() }
-function daysLeft(d){ if(!d)return null; return Math.ceil((new Date(d)-new Date())/(1000*60*60*24)) }
-function esc(s){ const el=document.createElement('div'); el.textContent=s||''; return el.innerHTML }
- 
-function toast(msg, type='ok'){
+
+// ═══════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function fmt(n){return Number(n).toLocaleString('uk-UA')+'₴'}
+function fmtDate(d){if(!d)return'—';const dt=new Date(d);return dt.toLocaleDateString('uk-UA',{day:'2-digit',month:'2-digit',year:'numeric'})}
+function initials(name){if(!name)return'?';const p=name.trim().split(' ');return p.length>=2?p[0][0]+p[1][0]:name.slice(0,2).toUpperCase()}
+function daysLeft(d){if(!d)return null;return Math.ceil((new Date(d)-new Date())/(1000*60*60*24))}
+function esc(s){const el=document.createElement('div');el.textContent=s||'';return el.innerHTML}
+
+function toast(msg,type='ok'){
   const el=document.getElementById('toast');
-  el.textContent=msg; el.className='toast '+type+' show';
-  setTimeout(()=>el.classList.remove('show'), 2500);
+  el.textContent=msg;el.className='toast '+type+' show';
+  setTimeout(()=>el.classList.remove('show'),2500);
 }
- 
+
 function switchTab(i){
   document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('act',i===j));
   document.querySelectorAll('.section').forEach((s,j)=>s.classList.toggle('act',i===j));
-  if(i===0) renderList();
-  if(i===2) renderClients();
-  if(i===3) renderAnalytics();
+  if(i===0)renderList();
+  if(i===2)renderClients();
+  if(i===3)renderAnalytics();
 }
- 
-// ─── STATUS / PAY / URGENCY LABELS ───────────────────────
+
+// ═══════════════════════════════════════════════════════════
+// STATUS / PAY / URGENCY
+// ═══════════════════════════════════════════════════════════
 function statusChip(s){
-  const map={
-    lead:['s-lead','🔵 Лід'],
-    quoted:['s-wait','💬 Думає'],
-    new:['s-new','✅ Підтвердив'],
-    work:['s-work','🟡 В роботі'],
-    wait:['s-wait','👁 Очікує'],
-    done:['s-done','🟢 Готово'],
-    repeat:['s-repeat','🔁 Повторне'],
-    cancel:['s-cancel','❌ Скасовано']
-  };
+  const map={lead:['s-lead','🔵 Лід'],quoted:['s-wait','💬 Думає'],new:['s-new','✅ Підтвердив'],work:['s-work','🟡 В роботі'],wait:['s-wait','👁 Очікує'],done:['s-done','🟢 Готово'],repeat:['s-repeat','🔁 Повторне'],cancel:['s-cancel','❌ Скасовано']};
   const [cls,label]=map[s]||['s-new','Нове'];
   return`<span class="status-chip ${cls}">${label}</span>`;
 }
@@ -759,164 +621,123 @@ function payChip(s){
   return`<span class="pay-chip ${cls}">${label}</span>`;
 }
 function urgencyChip(u){
-  if(!u||u==='normal') return'';
-  if(u==='hot') return`<span class="urg-chip urg-hot">⚡ Термінове</span>`;
-  if(u==='fire') return`<span class="urg-chip urg-fire">🔥 Дуже термінове</span>`;
+  if(!u||u==='normal')return'';
+  if(u==='hot')return`<span class="urg-chip urg-hot">⚡ Термінове</span>`;
+  if(u==='fire')return`<span class="urg-chip urg-fire">🔥 Дуже термінове</span>`;
   return'';
 }
- 
-// ─── PROFIT CALC ──────────────────────────────────────────
 function calcProfit(o){
-  const total = Number(o.total||0);
-  const cost = Number(o.cost||0);
-  if(!total&&!cost) return null;
-  return total - cost;
+  const total=Number(o.total||0),cost=Number(o.cost||0);
+  if(!total&&!cost)return null;
+  return total-cost;
 }
- 
-// ─── STATS BAR ────────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════
+// STATS BAR
+// ═══════════════════════════════════════════════════════════
 function renderStats(){
   const active=orders.filter(o=>o.status!=='cancel');
   const totalSum=active.reduce((a,o)=>a+Number(o.total||0),0);
-  const totalProfit=active.reduce((a,o)=>{const p=calcProfit(o); return p!==null?a+p:a},0);
+  const totalProfit=active.reduce((a,o)=>{const p=calcProfit(o);return p!==null?a+p:a},0);
   const debt=active.reduce((a,o)=>{
-    if(o.payStatus==='paid') return a;
-    if(o.payStatus==='part') return a+(Number(o.total||0)-Number(o.prepay||0));
+    if(o.payStatus==='paid')return a;
+    if(o.payStatus==='part')return a+(Number(o.total||0)-Number(o.prepay||0));
     return a+Number(o.total||0);
   },0);
   const inWork=orders.filter(o=>o.status==='work').length;
-  const todayStr = new Date().toISOString().slice(0,10);
-  const followUps = orders.filter(o=>o.nextContact&&o.nextContact<=todayStr&&o.status!=='done'&&o.status!=='cancel').length;
- 
+  const todayStr=new Date().toISOString().slice(0,10);
+  const followUps=orders.filter(o=>o.nextContact&&o.nextContact<=todayStr&&o.status!=='done'&&o.status!=='cancel').length;
   document.getElementById('stats-bar').innerHTML=`
     <div class="stat-card"><div class="stat-label">Замовлень</div><div class="stat-val purple">${orders.length}</div></div>
     <div class="stat-card"><div class="stat-label">Прибуток</div><div class="stat-val green">${fmt(totalProfit)}</div></div>
     <div class="stat-card"><div class="stat-label">Борг</div><div class="stat-val yellow">${fmt(debt)}</div></div>
-    <div class="stat-card"><div class="stat-label">${followUps>0?'📞 Зв\'язатись':'В роботі'}</div><div class="stat-val ${followUps>0?'red':''}"">${followUps>0?followUps:inWork}</div></div>
-  `;
+    <div class="stat-card"><div class="stat-label">${followUps>0?'📞 Зв\'язатись':'В роботі'}</div><div class="stat-val ${followUps>0?'red':''}">${followUps>0?followUps:inWork}</div></div>`;
 }
- 
-// ─── ORDER LIST ───────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════
+// ORDER LIST
+// ═══════════════════════════════════════════════════════════
 function setFilter(f){
   currentFilter=f;
   ['all','lead','new','work','done','wait'].forEach(id=>{
     const el=document.getElementById('f-'+id);
-    if(el){ el.style.borderColor = id===f ? 'var(--accent)' : ''; el.style.color = id===f ? 'var(--accent3)' : ''; }
+    if(el){el.style.borderColor=id===f?'var(--accent)':'';el.style.color=id===f?'var(--accent3)':''}
   });
   renderList();
 }
- 
+
 function renderList(){
   const q=(document.getElementById('search-input').value||'').toLowerCase();
   let list=[...orders];
-  // map stage to filter
-  const stageMap = {lead:['lead','quoted'],new:['new'],work:['work'],done:['done','repeat'],wait:['wait']};
-  if(currentFilter!=='all'){
-    const stages = stageMap[currentFilter]||[currentFilter];
-    list=list.filter(o=>stages.includes(o.status));
-  }
-  if(q) list=list.filter(o=>(o.clientName+o.type+o.subject+o.insta+o.tg+o.phone+o.email+o.executor).toLowerCase().includes(q));
+  const stageMap={lead:['lead','quoted'],new:['new'],work:['work'],done:['done','repeat'],wait:['wait']};
+  if(currentFilter!=='all'){const stages=stageMap[currentFilter]||[currentFilter];list=list.filter(o=>stages.includes(o.status))}
+  if(q)list=list.filter(o=>(o.clientName+o.type+o.subject+o.insta+o.tg+o.phone+o.email+o.executor).toLowerCase().includes(q));
   list.sort((a,b)=>b.createdAt-a.createdAt);
- 
   const el=document.getElementById('order-list');
-  if(!list.length){
-    el.innerHTML=`<div class="empty-state"><div class="empty-icon"><i class="ti ti-inbox"></i></div><div class="empty-text">Замовлень не знайдено</div></div>`;
-    return;
-  }
- 
-  const todayStr = new Date().toISOString().slice(0,10);
+  if(!list.length){el.innerHTML=`<div class="empty-state"><div class="empty-icon"><i class="ti ti-inbox"></i></div><div class="empty-text">Замовлень не знайдено</div></div>`;return}
+  const todayStr=new Date().toISOString().slice(0,10);
   el.innerHTML=list.map(o=>{
     const days=daysLeft(o.deadline);
     const daysBadge=days!==null?(days<0?`<span style="color:var(--red);font-size:11px"><i class="ti ti-alert-triangle"></i> Прострочено ${Math.abs(days)}д</span>`:days<=3?`<span style="color:var(--yellow);font-size:11px"><i class="ti ti-clock"></i> ${days}д</span>`:`<span style="color:var(--text2);font-size:11px"><i class="ti ti-calendar"></i> ${fmtDate(o.deadline)}</span>`):'';
     const profit=calcProfit(o);
-    const followBadge = o.nextContact && o.nextContact<=todayStr && o.status!=='done'&&o.status!=='cancel'?`<span class="next-contact-badge"><i class="ti ti-phone"></i> Зв'язатись!</span>`:'';
+    const followBadge=o.nextContact&&o.nextContact<=todayStr&&o.status!=='done'&&o.status!=='cancel'?`<span class="next-contact-badge"><i class="ti ti-phone"></i> Зв'язатись!</span>`:'';
     const contacts=[];
-    if(o.insta) contacts.push(`<span class="oi-contact"><i class="ti ti-brand-instagram"></i>${esc(o.insta)}</span>`);
-    if(o.tg) contacts.push(`<span class="oi-contact"><i class="ti ti-brand-telegram"></i>${esc(o.tg)}</span>`);
-    if(o.phone) contacts.push(`<span class="oi-contact"><i class="ti ti-phone"></i>${esc(o.phone)}</span>`);
-    if(o.executor) contacts.push(`<span class="oi-contact" style="color:var(--accent3)"><i class="ti ti-user-check"></i>${esc(o.executor)}</span>`);
+    if(o.insta)contacts.push(`<span class="oi-contact"><i class="ti ti-brand-instagram"></i>${esc(o.insta)}</span>`);
+    if(o.tg)contacts.push(`<span class="oi-contact"><i class="ti ti-brand-telegram"></i>${esc(o.tg)}</span>`);
+    if(o.phone)contacts.push(`<span class="oi-contact"><i class="ti ti-phone"></i>${esc(o.phone)}</span>`);
+    if(o.executor)contacts.push(`<span class="oi-contact" style="color:var(--accent3)"><i class="ti ti-user-check"></i>${esc(o.executor)}</span>`);
     return`<div class="order-item" onclick="openDetail('${esc(o.id)}')">
       <div class="oi-top">
-        <div>
-          <div class="oi-name">${esc(o.clientName)||'—'}</div>
-          <div class="oi-type">${esc(o.type)||'—'}${o.subject?' · '+esc(o.subject):''}</div>
-        </div>
+        <div><div class="oi-name">${esc(o.clientName)||'—'}</div><div class="oi-type">${esc(o.type)||'—'}${o.subject?' · '+esc(o.subject):''}</div></div>
         <div class="oi-right">
           <div class="oi-sum">${o.total?fmt(o.total):'—'}</div>
           ${profit!==null?`<div class="oi-profit">→ ${fmt(profit)}</div>`:''}
           <div style="margin-top:4px">${payChip(o.payStatus)}</div>
         </div>
       </div>
-      <div class="oi-bottom">
-        ${statusChip(o.status)}
-        ${urgencyChip(o.urgency)}
-        ${daysBadge}
-        ${followBadge}
-        ${contacts.join('')}
-      </div>
+      <div class="oi-bottom">${statusChip(o.status)}${urgencyChip(o.urgency)}${daysBadge}${followBadge}${contacts.join('')}</div>
     </div>`;
   }).join('');
   renderStats();
 }
- 
-// ─── DETAIL MODAL ─────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════
+// DETAIL MODAL
+// ═══════════════════════════════════════════════════════════
 function openDetail(id){
-  const o=orders.find(x=>x.id===id);
-  if(!o) return;
- 
+  const o=orders.find(x=>x.id===id);if(!o)return;
   const rest=Number(o.total||0)-Number(o.prepay||0);
   const pct=o.total?(Number(o.prepay||0)/Number(o.total)*100).toFixed(0):0;
   const days=daysLeft(o.deadline);
   const daysTxt=days===null?'—':days<0?`<span style="color:var(--red)">Прострочено на ${Math.abs(days)} днів</span>`:days===0?`<span style="color:var(--yellow)">Сьогодні!</span>`:`<span style="color:${days<=3?'var(--yellow)':'var(--text)'}">Через ${days} днів (${fmtDate(o.deadline)})</span>`;
-  const profit = calcProfit(o);
-  const todayStr = new Date().toISOString().slice(0,10);
-  const needsFollowUp = o.nextContact && o.nextContact<=todayStr && o.status!=='done'&&o.status!=='cancel';
- 
-  // Build modal safely
-  const modal = document.getElementById('detail-modal');
-  document.getElementById('modal-title').textContent = 'Замовлення #'+o.id.slice(-4).toUpperCase();
- 
-  let html = '';
- 
-  // Header
-  html += `<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+  const profit=calcProfit(o);
+  const todayStr=new Date().toISOString().slice(0,10);
+  const needsFollowUp=o.nextContact&&o.nextContact<=todayStr&&o.status!=='done'&&o.status!=='cancel';
+  document.getElementById('modal-title').textContent='Замовлення #'+o.id.slice(-4).toUpperCase();
+  let html='';
+  html+=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)">
     <div class="dp-avatar">${esc(initials(o.clientName))}</div>
-    <div style="flex:1">
-      <div class="dp-name">${esc(o.clientName)||'—'}</div>
-      <div class="dp-sub">${esc(o.type)||''}${o.subject?' · '+esc(o.subject):''}</div>
-    </div>
-    <div style="text-align:right">
-      ${statusChip(o.status)}
-      ${urgencyChip(o.urgency)}
-      <span style="font-size:11px;color:var(--text2);margin-top:4px;display:block">Додано: ${fmtDate(o.createdAt)}</span>
-    </div>
+    <div style="flex:1"><div class="dp-name">${esc(o.clientName)||'—'}</div><div class="dp-sub">${esc(o.type)||''}${o.subject?' · '+esc(o.subject):''}</div></div>
+    <div style="text-align:right">${statusChip(o.status)}${urgencyChip(o.urgency)}<span style="font-size:11px;color:var(--text2);margin-top:4px;display:block">Додано: ${fmtDate(o.createdAt)}</span></div>
   </div>`;
- 
-  // Follow up alert
-  if(needsFollowUp) html += `<div class="next-contact-badge" style="width:100%;justify-content:center;margin-bottom:12px;padding:10px"><i class="ti ti-phone-ringing"></i> Час зв'язатися з клієнтом! (${fmtDate(o.nextContact)})</div>`;
- 
-  // Contacts
-  const contactRows = [
-    o.phone ? `<div class="dp-row"><span class="dp-key"><i class="ti ti-phone"></i> Телефон</span><span class="dp-val"><span class="copy-contact" onclick="copyText('${esc(o.phone)}')">${esc(o.phone)} <i class="ti ti-copy" style="font-size:10px"></i></span></span></div>` : '',
-    o.insta ? `<div class="dp-row"><span class="dp-key"><i class="ti ti-brand-instagram"></i> Instagram</span><span class="dp-val"><span class="copy-contact" onclick="copyText('${esc(o.insta)}')">${esc(o.insta)} <i class="ti ti-copy" style="font-size:10px"></i></span></span></div>` : '',
-    o.tg ? `<div class="dp-row"><span class="dp-key"><i class="ti ti-brand-telegram"></i> Telegram</span><span class="dp-val"><span class="copy-contact" onclick="copyText('${esc(o.tg)}')">${esc(o.tg)} <i class="ti ti-copy" style="font-size:10px"></i></span></span></div>` : '',
-    o.email ? `<div class="dp-row"><span class="dp-key"><i class="ti ti-mail"></i> Email</span><span class="dp-val"><span class="copy-contact" onclick="copyText('${esc(o.email)}')">${esc(o.email)} <i class="ti ti-copy" style="font-size:10px"></i></span></span></div>` : '',
-    o.uni ? `<div class="dp-row"><span class="dp-key"><i class="ti ti-school"></i> Університет</span><span class="dp-val">${esc(o.uni)}</span></div>` : '',
-    o.source ? `<div class="dp-row"><span class="dp-key">📍 Джерело</span><span class="dp-val"><span class="src-badge">${esc(o.source)}</span></span></div>` : '',
+  if(needsFollowUp)html+=`<div class="next-contact-badge" style="width:100%;justify-content:center;margin-bottom:12px;padding:10px"><i class="ti ti-phone-ringing"></i> Час зв'язатися з клієнтом! (${fmtDate(o.nextContact)})</div>`;
+  const contactRows=[
+    o.phone?`<div class="dp-row"><span class="dp-key"><i class="ti ti-phone"></i> Телефон</span><span class="dp-val"><span class="copy-contact" onclick="copyText('${esc(o.phone)}')">${esc(o.phone)} <i class="ti ti-copy" style="font-size:10px"></i></span></span></div>`:'',
+    o.insta?`<div class="dp-row"><span class="dp-key"><i class="ti ti-brand-instagram"></i> Instagram</span><span class="dp-val"><span class="copy-contact" onclick="copyText('${esc(o.insta)}')">${esc(o.insta)} <i class="ti ti-copy" style="font-size:10px"></i></span></span></div>`:'',
+    o.tg?`<div class="dp-row"><span class="dp-key"><i class="ti ti-brand-telegram"></i> Telegram</span><span class="dp-val"><span class="copy-contact" onclick="copyText('${esc(o.tg)}')">${esc(o.tg)} <i class="ti ti-copy" style="font-size:10px"></i></span></span></div>`:'',
+    o.email?`<div class="dp-row"><span class="dp-key"><i class="ti ti-mail"></i> Email</span><span class="dp-val"><span class="copy-contact" onclick="copyText('${esc(o.email)}')">${esc(o.email)} <i class="ti ti-copy" style="font-size:10px"></i></span></span></div>`:'',
+    o.uni?`<div class="dp-row"><span class="dp-key"><i class="ti ti-school"></i> Університет</span><span class="dp-val">${esc(o.uni)}</span></div>`:'',
+    o.source?`<div class="dp-row"><span class="dp-key">📍 Джерело</span><span class="dp-val"><span class="src-badge">${esc(o.source)}</span></span></div>`:'',
   ].filter(Boolean).join('');
- 
-  if(contactRows) html += `<div class="dp-section"><div class="dp-section-title"><i class="ti ti-address-card"></i> Контакти</div>${contactRows}</div>`;
- 
-  // Work details
-  html += `<div class="dp-section"><div class="dp-section-title"><i class="ti ti-file-text"></i> Деталі роботи</div>`;
-  if(o.pages) html += `<div class="dp-row"><span class="dp-key">Сторінок</span><span class="dp-val">${esc(o.pages)} стор.</span></div>`;
-  html += `<div class="dp-row"><span class="dp-key">Дедлайн</span><span class="dp-val">${daysTxt}</span></div>`;
-  if(o.nextContact) html += `<div class="dp-row"><span class="dp-key">Наступний контакт</span><span class="dp-val" style="color:var(--orange)">${fmtDate(o.nextContact)}</span></div>`;
-  if(o.filelink) html += `<div class="dp-row"><span class="dp-key">🔗 Файли</span><span class="dp-val"><a href="${esc(o.filelink)}" target="_blank" style="color:var(--accent3)">Відкрити →</a></span></div>`;
-  if(o.desc) html += `<div class="dp-row" style="flex-direction:column;align-items:flex-start;gap:4px"><span class="dp-key">Опис</span><span style="font-size:12px;color:var(--text);line-height:1.5;margin-top:2px">${esc(o.desc)}</span></div>`;
-  html += `</div>`;
- 
-  // Finance
-  html += `<div class="dp-section"><div class="dp-section-title"><i class="ti ti-currency-hryvnia"></i> Фінанси</div>
+  if(contactRows)html+=`<div class="dp-section"><div class="dp-section-title"><i class="ti ti-address-card"></i> Контакти</div>${contactRows}</div>`;
+  html+=`<div class="dp-section"><div class="dp-section-title"><i class="ti ti-file-text"></i> Деталі роботи</div>`;
+  if(o.pages)html+=`<div class="dp-row"><span class="dp-key">Сторінок</span><span class="dp-val">${esc(o.pages)} стор.</span></div>`;
+  html+=`<div class="dp-row"><span class="dp-key">Дедлайн</span><span class="dp-val">${daysTxt}</span></div>`;
+  if(o.nextContact)html+=`<div class="dp-row"><span class="dp-key">Наступний контакт</span><span class="dp-val" style="color:var(--orange)">${fmtDate(o.nextContact)}</span></div>`;
+  if(o.filelink)html+=`<div class="dp-row"><span class="dp-key">🔗 Файли</span><span class="dp-val"><a href="${esc(o.filelink)}" target="_blank" style="color:var(--accent3)">Відкрити →</a></span></div>`;
+  if(o.desc)html+=`<div class="dp-row" style="flex-direction:column;align-items:flex-start;gap:4px"><span class="dp-key">Опис</span><span style="font-size:12px;color:var(--text);line-height:1.5;margin-top:2px">${esc(o.desc)}</span></div>`;
+  html+=`</div>`;
+  html+=`<div class="dp-section"><div class="dp-section-title"><i class="ti ti-currency-hryvnia"></i> Фінанси</div>
     <div class="fin-grid" ${profit!==null?'style="grid-template-columns:1fr 1fr"':''}>
       <div class="fin-cell"><div class="fin-label">Сума клієнта</div><div class="fin-val fin-purple">${fmt(o.total||0)}</div></div>
       <div class="fin-cell"><div class="fin-label">Передоплата</div><div class="fin-val fin-green">${fmt(o.prepay||0)}</div></div>
@@ -930,42 +751,37 @@ function openDetail(id){
     </div>
     <div style="margin-top:8px;text-align:center">${payChip(o.payStatus)}</div>
   </div>`;
- 
-  // Executor
-  if(o.executor) html += `<div class="dp-section"><div class="dp-section-title"><i class="ti ti-user-check"></i> Виконавець</div>
-    <div class="dp-row"><span class="dp-key">Ім'я</span><span class="dp-val">${esc(o.executor)}</span></div>
-  </div>`;
- 
-  // Notes
-  if(o.notes) html += `<div class="dp-section"><div class="dp-section-title"><i class="ti ti-notes"></i> Нотатки</div>
-    <div style="font-size:13px;color:var(--text2);line-height:1.6;background:var(--bg3);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">${esc(o.notes)}</div>
-  </div>`;
- 
-  // Actions
-  html += `<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+  if(o.executor)html+=`<div class="dp-section"><div class="dp-section-title"><i class="ti ti-user-check"></i> Виконавець</div><div class="dp-row"><span class="dp-key">Ім'я</span><span class="dp-val">${esc(o.executor)}</span></div></div>`;
+  if(o.notes)html+=`<div class="dp-section"><div class="dp-section-title"><i class="ti ti-notes"></i> Нотатки</div><div style="font-size:13px;color:var(--text2);line-height:1.6;background:var(--bg3);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">${esc(o.notes)}</div></div>`;
+  html+=`<div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
     <button class="btn-sm success" onclick="changeStatus('${esc(o.id)}')"><i class="ti ti-refresh"></i> Статус</button>
     <button class="btn-sm success" onclick="markPaid('${esc(o.id)}')"><i class="ti ti-check"></i> Оплачено</button>
     <button class="btn-sm" onclick="editOrder('${esc(o.id)}')"><i class="ti ti-edit"></i> Редагувати</button>
     <button class="btn-sm" onclick="copyAll('${esc(o.id)}')"><i class="ti ti-copy"></i> Контакт</button>
     <button class="btn-sm danger" onclick="deleteOrder('${esc(o.id)}')"><i class="ti ti-trash"></i> Видалити</button>
   </div>`;
- 
-  document.getElementById('modal-body').innerHTML = html;
-  modal.classList.add('open');
+  document.getElementById('modal-body').innerHTML=html;
+  document.getElementById('detail-modal').classList.add('open');
 }
- 
-function closeModal(){ document.getElementById('detail-modal').classList.remove('open') }
-document.getElementById('detail-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
- 
-function copyText(t){
-  safeCopy(t, ()=>toast('Скопійовано: '+t,'ok'));
+
+function closeModal(){document.getElementById('detail-modal').classList.remove('open')}
+const _mo=document.getElementById('detail-modal');
+_mo.addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
+_mo.addEventListener('touchend',e=>{if(e.target===e.currentTarget)closeModal()});
+
+function safeCopy(text,cb){
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(text).then(cb).catch(()=>{legacyCopy(text,cb)});
+  } else {legacyCopy(text,cb)}
 }
-function copyAll(id){
-  const o=orders.find(x=>x.id===id);if(!o)return;
-  const t=[o.clientName,o.phone,o.insta,o.tg,o.email].filter(Boolean).join('\n');
-  copyText(t);
+function legacyCopy(text,cb){
+  const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');cb()}catch(e){}
+  document.body.removeChild(ta);
 }
- 
+function copyText(t){safeCopy(t,()=>toast('Скопійовано: '+t,'ok'))}
+function copyAll(id){const o=orders.find(x=>x.id===id);if(!o)return;const t=[o.clientName,o.phone,o.insta,o.tg,o.email].filter(Boolean).join('\n');copyText(t)}
+
 function changeStatus(id){
   const o=orders.find(x=>x.id===id);if(!o)return;
   const cycle=['lead','quoted','new','work','wait','done','cancel'];
@@ -973,19 +789,20 @@ function changeStatus(id){
   o.status=cycle[(i+1)%cycle.length];
   saveOrders(orders);renderList();openDetail(id);toast('Статус змінено','ok');
 }
- 
 function markPaid(id){
   const o=orders.find(x=>x.id===id);if(!o)return;
   o.payStatus='paid';o.prepay=o.total;
   saveOrders(orders);renderList();openDetail(id);toast('Позначено як оплачено ✓','ok');
 }
- 
 function deleteOrder(id){
-  if(!confirm('Видалити замовлення?')) return;
+  if(!confirm('Видалити замовлення?'))return;
   orders=orders.filter(o=>o.id!==id);
-  saveOrders(orders);closeModal();renderList();toast('Видалено','err');
+  // Delete from Firebase
+  const safeId=id.replace(/[.#$[\]]/g,'_');
+  ordersRef.child(safeId).remove().catch(()=>{});
+  _store.set(STORE_KEY,JSON.stringify(orders));
+  closeModal();renderList();toast('Видалено','err');
 }
- 
 function editOrder(id){
   const o=orders.find(x=>x.id===id);if(!o)return;
   closeModal();editingId=id;
@@ -1012,43 +829,41 @@ function editOrder(id){
   document.getElementById('f-pay-status').value=o.payStatus||'unpaid';
   document.getElementById('f-notes').value=o.notes||'';
   document.getElementById('save-btn').innerHTML='<i class="ti ti-device-floppy" style="margin-right:6px"></i> Зберегти зміни';
-  updatePayCalc();
-  switchTab(1);
+  updatePayCalc();switchTab(1);
 }
- 
-// ─── SAVE ORDER ───────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════
+// SAVE ORDER
+// ═══════════════════════════════════════════════════════════
 function saveOrder(){
   const name=document.getElementById('f-client-name').value.trim();
-  const total=document.getElementById('f-total').value;
   if(!name){toast("Вкажіть ім'я клієнта",'err');return}
- 
   const data={
-    id: editingId||uid(),
-    createdAt: editingId?(orders.find(o=>o.id===editingId)||{}).createdAt||Date.now():Date.now(),
-    clientName: name,
-    phone: document.getElementById('f-phone').value.trim(),
-    insta: document.getElementById('f-insta').value.trim(),
-    tg: document.getElementById('f-tg').value.trim(),
-    email: document.getElementById('f-email').value.trim(),
-    uni: document.getElementById('f-uni').value.trim(),
-    type: document.getElementById('f-type').value,
-    subject: document.getElementById('f-subject').value.trim(),
-    pages: document.getElementById('f-pages').value,
-    deadline: document.getElementById('f-deadline').value,
-    desc: document.getElementById('f-desc').value.trim(),
-    urgency: document.getElementById('f-urgency').value,
-    source: document.getElementById('f-source').value,
-    status: document.getElementById('f-stage').value,
-    nextContact: document.getElementById('f-next-contact').value,
-    filelink: document.getElementById('f-filelink').value.trim(),
-    executor: document.getElementById('f-executor').value.trim(),
-    cost: Number(document.getElementById('f-cost').value)||0,
-    total: Number(total)||0,
-    prepay: Number(document.getElementById('f-prepay').value)||0,
-    payStatus: document.getElementById('f-pay-status').value,
-    notes: document.getElementById('f-notes').value.trim(),
+    id:editingId||uid(),
+    createdAt:editingId?(orders.find(o=>o.id===editingId)||{}).createdAt||Date.now():Date.now(),
+    clientName:name,
+    phone:document.getElementById('f-phone').value.trim(),
+    insta:document.getElementById('f-insta').value.trim(),
+    tg:document.getElementById('f-tg').value.trim(),
+    email:document.getElementById('f-email').value.trim(),
+    uni:document.getElementById('f-uni').value.trim(),
+    type:document.getElementById('f-type').value,
+    subject:document.getElementById('f-subject').value.trim(),
+    pages:document.getElementById('f-pages').value,
+    deadline:document.getElementById('f-deadline').value,
+    desc:document.getElementById('f-desc').value.trim(),
+    urgency:document.getElementById('f-urgency').value,
+    source:document.getElementById('f-source').value,
+    status:document.getElementById('f-stage').value,
+    nextContact:document.getElementById('f-next-contact').value,
+    filelink:document.getElementById('f-filelink').value.trim(),
+    executor:document.getElementById('f-executor').value.trim(),
+    cost:Number(document.getElementById('f-cost').value)||0,
+    total:Number(document.getElementById('f-total').value)||0,
+    prepay:Number(document.getElementById('f-prepay').value)||0,
+    payStatus:document.getElementById('f-pay-status').value,
+    notes:document.getElementById('f-notes').value.trim(),
   };
- 
   if(editingId){
     orders=orders.map(o=>o.id===editingId?data:o);
     editingId=null;
@@ -1058,16 +873,11 @@ function saveOrder(){
     orders.unshift(data);
     toast('Замовлення збережено ✓','ok');
   }
-  saveOrders(orders);
-  clearForm();
-  switchTab(0);
+  saveOrders(orders);clearForm();switchTab(0);
 }
- 
+
 function clearForm(){
-  ['f-client-name','f-phone','f-insta','f-tg','f-email','f-uni','f-subject','f-pages','f-deadline','f-desc','f-total','f-prepay','f-notes','f-executor','f-cost','f-next-contact','f-filelink'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='';
-  });
-  document.getElementById('f-status') && (document.getElementById('f-status').value='new');
+  ['f-client-name','f-phone','f-insta','f-tg','f-email','f-uni','f-subject','f-pages','f-deadline','f-desc','f-total','f-prepay','f-notes','f-executor','f-cost','f-next-contact','f-filelink'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
   document.getElementById('f-stage').value='new';
   document.getElementById('f-pay-status').value='unpaid';
   document.getElementById('f-urgency').value='normal';
@@ -1075,7 +885,7 @@ function clearForm(){
   document.getElementById('pay-calc').style.display='none';
   document.getElementById('f-profit-preview').value='';
 }
- 
+
 function updatePayCalc(){
   const total=Number(document.getElementById('f-total').value)||0;
   const pre=Number(document.getElementById('f-prepay').value)||0;
@@ -1087,30 +897,29 @@ function updatePayCalc(){
   document.getElementById('pc-pre').textContent=fmt(pre);
   document.getElementById('pc-rest').textContent=fmt(Math.max(0,total-pre));
   document.getElementById('pc-cost').textContent=cost?fmt(cost):'—';
-  const profit = total-cost;
-  document.getElementById('pc-profit').textContent = cost?fmt(profit):'—';
-  document.getElementById('f-profit-preview').value = cost?fmt(profit):'';
+  const profit=total-cost;
+  document.getElementById('pc-profit').textContent=cost?fmt(profit):'—';
+  document.getElementById('f-profit-preview').value=cost?fmt(profit):'';
   const pct=total?Math.min(100,Math.round(pre/total*100)):0;
   document.getElementById('pc-bar').style.width=pct+'%';
 }
- 
-// ─── CLIENTS TAB ──────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════
+// CLIENTS TAB
+// ═══════════════════════════════════════════════════════════
 function renderClients(){
   const q=(document.getElementById('client-search').value||'').toLowerCase();
   const map={};
   orders.forEach(o=>{
     const key=o.clientName||(o.phone||o.insta||o.tg||'Unknown');
-    if(!map[key]) map[key]={name:o.clientName,phone:o.phone,insta:o.insta,tg:o.tg,email:o.email,uni:o.uni,orders:[]};
+    if(!map[key])map[key]={name:o.clientName,phone:o.phone,insta:o.insta,tg:o.tg,email:o.email,uni:o.uni,orders:[]};
     map[key].orders.push(o);
   });
- 
   let clients=Object.values(map);
-  if(q) clients=clients.filter(c=>(c.name+c.phone+c.insta+c.tg+c.email).toLowerCase().includes(q));
+  if(q)clients=clients.filter(c=>(c.name+c.phone+c.insta+c.tg+c.email).toLowerCase().includes(q));
   clients.sort((a,b)=>b.orders.length-a.orders.length);
- 
   const el=document.getElementById('client-list');
   if(!clients.length){el.innerHTML=`<div class="empty-state"><div class="empty-icon"><i class="ti ti-users"></i></div><div class="empty-text">Клієнтів не знайдено</div></div>`;return}
- 
   el.innerHTML=clients.map(c=>{
     const totalSum=c.orders.reduce((a,o)=>a+Number(o.total||0),0);
     const totalProfit=c.orders.reduce((a,o)=>{const p=calcProfit(o);return p!==null?a+p:a},0);
@@ -1124,10 +933,7 @@ function renderClients(){
     return`<div class="card" style="margin-bottom:10px">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
         <div class="dp-avatar" style="width:40px;height:40px;font-size:14px">${esc(initials(c.name))}</div>
-        <div style="flex:1">
-          <div style="font-size:14px;font-weight:700;color:var(--text)">${esc(c.name)||'—'}</div>
-          ${c.uni?`<div style="font-size:11px;color:var(--text2)">${esc(c.uni)}</div>`:''}
-        </div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--text)">${esc(c.name)||'—'}</div>${c.uni?`<div style="font-size:11px;color:var(--text2)">${esc(c.uni)}</div>`:''}</div>
         <div style="text-align:right">
           <div style="font-size:13px;font-weight:700;color:var(--accent3)">${fmt(totalSum)}</div>
           ${totalProfit>0?`<div style="font-size:11px;color:var(--green)">→ ${fmt(totalProfit)}</div>`:''}
@@ -1143,8 +949,10 @@ function renderClients(){
     </div>`;
   }).join('');
 }
- 
-// ─── ANALYTICS ────────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════
+// ANALYTICS
+// ═══════════════════════════════════════════════════════════
 function renderAnalytics(){
   const active=orders.filter(o=>o.status!=='cancel');
   const totalRev=active.reduce((a,o)=>a+Number(o.total||0),0);
@@ -1152,40 +960,21 @@ function renderAnalytics(){
   const totalProfit=active.reduce((a,o)=>{const p=calcProfit(o);return p!==null?a+p:a},0);
   const totalPaid=active.reduce((a,o)=>a+(o.payStatus==='paid'?Number(o.total||0):Number(o.prepay||0)),0);
   const debt=Math.max(0,totalRev-totalPaid);
-  const margin = totalRev>0?(totalProfit/totalRev*100).toFixed(0):0;
- 
-  // by type
+  const margin=totalRev>0?(totalProfit/totalRev*100).toFixed(0):0;
   const byType={};
   active.forEach(o=>{const t=o.type||'Інше';if(!byType[t]){byType[t]={count:0,sum:0,profit:0}}byType[t].count++;byType[t].sum+=Number(o.total||0);const p=calcProfit(o);if(p!==null)byType[t].profit+=p});
-  const typeRows=Object.entries(byType).sort((a,b)=>b[1].sum-a[1].sum).slice(0,8).map(([t,d])=>`
-    <div class="dp-row"><span class="dp-key">${esc(t)}</span><span class="dp-val"><b>${d.count}</b> × — ${fmt(d.sum)}${d.profit>0?' · <span style="color:var(--green)">'+fmt(d.profit)+'</span>':''}</span></div>
-  `).join('');
- 
-  // by source
+  const typeRows=Object.entries(byType).sort((a,b)=>b[1].sum-a[1].sum).slice(0,8).map(([t,d])=>`<div class="dp-row"><span class="dp-key">${esc(t)}</span><span class="dp-val"><b>${d.count}</b> × — ${fmt(d.sum)}${d.profit>0?' · <span style="color:var(--green)">'+fmt(d.profit)+'</span>':''}</span></div>`).join('');
   const bySource={};
   orders.forEach(o=>{if(o.source){if(!bySource[o.source])bySource[o.source]=0;bySource[o.source]++}});
-  const srcRows=Object.entries(bySource).sort((a,b)=>b[1]-a[1]).map(([s,n])=>`
-    <div class="dp-row"><span class="dp-key"><span class="src-badge">${esc(s)}</span></span><span class="dp-val"><b>${n}</b> замовлень</span></div>
-  `).join('');
- 
-  // by executor
+  const srcRows=Object.entries(bySource).sort((a,b)=>b[1]-a[1]).map(([s,n])=>`<div class="dp-row"><span class="dp-key"><span class="src-badge">${esc(s)}</span></span><span class="dp-val"><b>${n}</b> замовлень</span></div>`).join('');
   const byExec={};
   active.forEach(o=>{if(o.executor){const k=o.executor;if(!byExec[k]){byExec[k]={count:0,cost:0}}byExec[k].count++;byExec[k].cost+=Number(o.cost||0)}});
-  const execRows=Object.entries(byExec).sort((a,b)=>b[1].count-a[1].count).map(([e,d])=>`
-    <div class="dp-row"><span class="dp-key"><i class="ti ti-user-check" style="font-size:12px"></i> ${esc(e)}</span><span class="dp-val"><b>${d.count}</b> робіт — виплачено ${fmt(d.cost)}</span></div>
-  `).join('');
- 
-  // by status
+  const execRows=Object.entries(byExec).sort((a,b)=>b[1].count-a[1].count).map(([e,d])=>`<div class="dp-row"><span class="dp-key"><i class="ti ti-user-check" style="font-size:12px"></i> ${esc(e)}</span><span class="dp-val"><b>${d.count}</b> робіт — виплачено ${fmt(d.cost)}</span></div>`).join('');
   const byStatus={};
   orders.forEach(o=>{const s=o.status||'new';if(!byStatus[s])byStatus[s]=0;byStatus[s]++});
- 
-  // overdue
   const overdue=orders.filter(o=>o.deadline&&daysLeft(o.deadline)<0&&o.status!=='done'&&o.status!=='cancel'&&o.status!=='repeat');
- 
-  // upcoming follow-ups
-  const todayStr = new Date().toISOString().slice(0,10);
-  const followUps = orders.filter(o=>o.nextContact&&o.nextContact>=todayStr&&o.status!=='done'&&o.status!=='cancel').sort((a,b)=>a.nextContact.localeCompare(b.nextContact)).slice(0,5);
- 
+  const todayStr=new Date().toISOString().slice(0,10);
+  const followUps=orders.filter(o=>o.nextContact&&o.nextContact>=todayStr&&o.status!=='done'&&o.status!=='cancel').sort((a,b)=>a.nextContact.localeCompare(b.nextContact)).slice(0,5);
   document.getElementById('analytics-content').innerHTML=`
     <div class="card">
       <div class="card-head"><div class="card-num" style="background:linear-gradient(135deg,var(--green2),var(--green))"><i class="ti ti-chart-pie" style="font-size:12px"></i></div><div class="card-title"><b>Фінансовий підсумок</b></div></div>
@@ -1193,163 +982,77 @@ function renderAnalytics(){
         <div class="fin-cell"><div class="fin-label">Загальний оборот</div><div class="fin-val fin-purple">${fmt(totalRev)}</div></div>
         <div class="fin-cell"><div class="fin-label">Собівартість</div><div class="fin-val fin-red">${fmt(totalCost)}</div></div>
         <div class="fin-cell"><div class="fin-label">Чистий прибуток</div><div class="fin-val fin-green">${fmt(totalProfit)}</div></div>
-        <div class="fin-cell"><div class="fin-label">Маржинальність</div><div class="fin-val fin-orange">${margin}%</div></div>
-        <div class="fin-cell"><div class="fin-label">Отримано</div><div class="fin-val fin-green">${fmt(totalPaid)}</div></div>
         <div class="fin-cell"><div class="fin-label">Борг клієнтів</div><div class="fin-val fin-yellow">${fmt(debt)}</div></div>
+        <div class="fin-cell"><div class="fin-label">Оплачено</div><div class="fin-val fin-green">${fmt(totalPaid)}</div></div>
+        <div class="fin-cell"><div class="fin-label">Маржа</div><div class="fin-val" style="color:var(--accent3)">${margin}%</div></div>
       </div>
-      <div style="font-size:11px;color:var(--text2);margin-bottom:5px">Відсоток зборів</div>
-      <div class="progress-bar" style="height:8px"><div class="progress-fill" style="width:${totalRev?(totalPaid/totalRev*100).toFixed(0):0}%"></div></div>
-      <div style="font-size:12px;color:var(--text2);margin-top:5px;text-align:right">${totalRev?Math.round(totalPaid/totalRev*100):0}% зібрано</div>
     </div>
- 
-    <div class="card">
-      <div class="card-head"><div class="card-num"><i class="ti ti-file-text" style="font-size:12px"></i></div><div class="card-title"><b>По типах робіт</b></div></div>
-      ${typeRows||'<div style="color:var(--text2);font-size:13px">Немає даних</div>'}
-    </div>
- 
-    ${srcRows?`<div class="card">
-      <div class="card-head"><div class="card-num" style="background:linear-gradient(135deg,#3b82f6,#6c63ff)"><i class="ti ti-map-pin" style="font-size:12px"></i></div><div class="card-title"><b>Джерела клієнтів</b></div></div>
-      ${srcRows}
-    </div>`:''}
- 
-    ${execRows?`<div class="card">
-      <div class="card-head"><div class="card-num" style="background:linear-gradient(135deg,#f59e0b,var(--accent))"><i class="ti ti-users" style="font-size:12px"></i></div><div class="card-title"><b>Виконавці</b></div></div>
-      ${execRows}
-    </div>`:''}
- 
+    ${typeRows?`<div class="card"><div class="card-head"><div class="card-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2))"><i class="ti ti-list" style="font-size:12px"></i></div><div class="card-title"><b>Типи робіт</b></div></div>${typeRows}</div>`:''}
+    ${srcRows?`<div class="card"><div class="card-head"><div class="card-num" style="background:linear-gradient(135deg,#3b82f6,#6c63ff)"><i class="ti ti-map-pin" style="font-size:12px"></i></div><div class="card-title"><b>Джерела клієнтів</b></div></div>${srcRows}</div>`:''}
+    ${execRows?`<div class="card"><div class="card-head"><div class="card-num" style="background:linear-gradient(135deg,#f59e0b,var(--accent))"><i class="ti ti-users" style="font-size:12px"></i></div><div class="card-title"><b>Виконавці</b></div></div>${execRows}</div>`:''}
     <div class="card">
       <div class="card-head"><div class="card-num" style="background:linear-gradient(135deg,#f59e0b,#f97316)"><i class="ti ti-flag" style="font-size:12px"></i></div><div class="card-title"><b>Статуси</b></div></div>
       ${Object.entries(byStatus).map(([s,n])=>`<div class="dp-row"><span class="dp-key">${statusChip(s)}</span><span class="dp-val"><b>${n}</b> замовлень</span></div>`).join('')||'<div style="color:var(--text2);font-size:13px">Немає даних</div>'}
     </div>
- 
-    ${followUps.length?`<div class="card" style="border-color:rgba(249,115,22,.3)">
-      <div class="card-head"><div class="card-num" style="background:var(--orange)"><i class="ti ti-phone" style="font-size:12px"></i></div><div class="card-title"><b>Заплановані контакти</b></div></div>
-      ${followUps.map(o=>`<div class="dp-row"><span class="dp-key">${esc(o.clientName)}</span><span class="dp-val" style="color:var(--orange)">${fmtDate(o.nextContact)}</span></div>`).join('')}
-    </div>`:''}
- 
-    ${overdue.length?`<div class="card" style="border-color:rgba(244,63,94,.3)">
-      <div class="card-head"><div class="card-num" style="background:var(--red)"><i class="ti ti-alert-triangle" style="font-size:12px"></i></div><div class="card-title"><b style="color:var(--red)">Прострочені дедлайни (${overdue.length})</b></div></div>
-      ${overdue.map(o=>`<div class="dp-row"><span class="dp-key">${esc(o.clientName)}</span><span class="dp-val" style="color:var(--red)">${Math.abs(daysLeft(o.deadline))}д прострочено</span></div>`).join('')}
-    </div>`:''}
-  `;
+    ${followUps.length?`<div class="card" style="border-color:rgba(249,115,22,.3)"><div class="card-head"><div class="card-num" style="background:var(--orange)"><i class="ti ti-phone" style="font-size:12px"></i></div><div class="card-title"><b>Заплановані контакти</b></div></div>${followUps.map(o=>`<div class="dp-row"><span class="dp-key">${esc(o.clientName)}</span><span class="dp-val" style="color:var(--orange)">${fmtDate(o.nextContact)}</span></div>`).join('')}</div>`:''}
+    ${overdue.length?`<div class="card" style="border-color:rgba(244,63,94,.3)"><div class="card-head"><div class="card-num" style="background:var(--red)"><i class="ti ti-alert-triangle" style="font-size:12px"></i></div><div class="card-title"><b style="color:var(--red)">Прострочені дедлайни (${overdue.length})</b></div></div>${overdue.map(o=>`<div class="dp-row"><span class="dp-key">${esc(o.clientName)}</span><span class="dp-val" style="color:var(--red)">${Math.abs(daysLeft(o.deadline))}д прострочено</span></div>`).join('')}</div>`:''}`;
 }
- 
-// ─── EXPORT CSV ───────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════
+// EXPORT / IMPORT CSV
+// ═══════════════════════════════════════════════════════════
 function exportCSV(){
   if(!orders.length){toast('Немає замовлень для експорту','err');return}
-  const cols=['id','createdAt','clientName','phone','insta','tg','email','uni','type','subject','pages','deadline','urgency','source','status','nextContact','filelink','executor','cost','total','prepay','payStatus','notes','desc'];
+  const header=['ID','Дата','Клієнт','Телефон','Instagram','Telegram','Email','Університет','Тип роботи','Предмет','Сторінок','Дедлайн','Терміновість','Джерело','Статус','Наступний контакт','Файли','Виконавець','Собівартість','Сума','Передоплата','Оплата','Нотатки','Опис'];
   const stageLabels={lead:'Лід',quoted:'Думає',new:'Підтвердив',work:'В роботі',wait:'Очікує',done:'Готово',repeat:'Повторне',cancel:'Скасовано'};
-  const header = ['ID','Дата','Клієнт','Телефон','Instagram','Telegram','Email','Університет','Тип роботи','Предмет','Сторінок','Дедлайн','Терміновість','Джерело','Статус','Наступний контакт','Файли','Виконавець','Собівартість','Сума','Передоплата','Оплата','Нотатки','Опис'];
-  const rows = orders.map(o=>[
-    o.id,
-    fmtDate(o.createdAt),
-    o.clientName||'',
-    o.phone||'',
-    o.insta||'',
-    o.tg||'',
-    o.email||'',
-    o.uni||'',
-    o.type||'',
-    o.subject||'',
-    o.pages||'',
-    o.deadline||'',
-    o.urgency||'normal',
-    o.source||'',
-    stageLabels[o.status]||o.status||'',
-    o.nextContact||'',
-    o.filelink||'',
-    o.executor||'',
-    o.cost||0,
-    o.total||0,
-    o.prepay||0,
-    o.payStatus||'unpaid',
-    (o.notes||'').replace(/[\n\r,]/g,' '),
-    (o.desc||'').replace(/[\n\r,]/g,' '),
-  ].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
- 
-  const csv = '\uFEFF' + [header.map(h=>`"${h}"`).join(','), ...rows].join('\r\n');
-  const blob = new Blob([csv],{type:'text/csv;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download='crm-замовлення-'+new Date().toISOString().slice(0,10)+'.csv';
-  a.click(); URL.revokeObjectURL(url);
+  const rows=orders.map(o=>[o.id,fmtDate(o.createdAt),o.clientName||'',o.phone||'',o.insta||'',o.tg||'',o.email||'',o.uni||'',o.type||'',o.subject||'',o.pages||'',o.deadline||'',o.urgency||'normal',o.source||'',stageLabels[o.status]||o.status||'',o.nextContact||'',o.filelink||'',o.executor||'',o.cost||0,o.total||0,o.prepay||0,o.payStatus||'unpaid',(o.notes||'').replace(/[\n\r,]/g,' '),(o.desc||'').replace(/[\n\r,]/g,' ')].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const csv='\uFEFF'+[header.map(h=>`"${h}"`).join(','),...rows].join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='crm-замовлення-'+new Date().toISOString().slice(0,10)+'.csv';a.click();URL.revokeObjectURL(url);
   toast(`Експортовано ${orders.length} замовлень ✓`,'ok');
 }
- 
-function importCSV(){ document.getElementById('csv-import-input').click(); }
- 
+
+function importCSV(){document.getElementById('csv-import-input').click()}
+
 function handleCSVImport(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
     try{
-      const text = e.target.result.replace(/^\uFEFF/,'');
-      const lines = text.split(/\r?\n/).filter(Boolean);
-      if(lines.length < 2){toast('Файл порожній','err');return}
-      // Parse header
-      const parseRow = line => {
-        const res=[];let cur='';let inQ=false;
-        for(const ch of line){
-          if(ch==='"'){inQ=!inQ}
-          else if(ch===','&&!inQ){res.push(cur.trim());cur=''}
-          else cur+=ch;
-        }
-        res.push(cur.trim());
-        return res.map(v=>v.replace(/^"|"$/g,'').replace(/""/g,'"'));
-      };
-      const header = parseRow(lines[0]);
-      let imported=0, skipped=0;
+      const text=e.target.result.replace(/^\uFEFF/,'');
+      const lines=text.split(/\r?\n/).filter(Boolean);
+      if(lines.length<2){toast('Файл порожній','err');return}
+      const parseRow=line=>{const res=[];let cur='';let inQ=false;for(const ch of line){if(ch==='"'){inQ=!inQ}else if(ch===','&&!inQ){res.push(cur.trim());cur=''}else cur+=ch}res.push(cur.trim());return res.map(v=>v.replace(/^"|"$/g,'').replace(/""/g,'"'))};
+      const header=parseRow(lines[0]);
+      let imported=0,skipped=0;
       for(let i=1;i<lines.length;i++){
-        const vals = parseRow(lines[i]);
-        if(vals.length < 3) continue;
-        const row = {};
-        header.forEach((h,j)=>row[h]=vals[j]||'');
-        const id = row['id']||row['ID']||uid();
-        const clientName = row['clientName']||row['Клієнт']||'';
+        const vals=parseRow(lines[i]);if(vals.length<3)continue;
+        const row={};header.forEach((h,j)=>row[h]=vals[j]||'');
+        const id=row['id']||row['ID']||uid();
+        const clientName=row['clientName']||row['Клієнт']||'';
         if(!clientName){skipped++;continue}
         if(orders.find(o=>o.id===id)){skipped++;continue}
-        orders.push({
-          id, createdAt: Date.now(),
-          clientName, phone: row['phone']||row['Телефон']||'',
-          insta: row['insta']||row['Instagram']||'', tg: row['tg']||row['Telegram']||'',
-          email: row['email']||row['Email']||'', uni: row['uni']||row['Університет']||'',
-          type: row['type']||row['Тип роботи']||'Інше', subject: row['subject']||row['Предмет']||'',
-          pages: row['pages']||row['Сторінок']||'', deadline: row['deadline']||row['Дедлайн']||'',
-          urgency: row['urgency']||'normal', source: row['source']||row['Джерело']||'',
-          status: 'new', executor: row['executor']||row['Виконавець']||'',
-          cost: Number(row['cost']||row['Собівартість'])||0,
-          total: Number(row['total']||row['Сума'])||0,
-          prepay: Number(row['prepay']||row['Передоплата'])||0,
-          payStatus: row['payStatus']||row['Оплата']||'unpaid',
-          notes: row['notes']||row['Нотатки']||'',
-          desc: row['desc']||row['Опис']||'',
-        });
+        orders.push({id,createdAt:Date.now(),clientName,phone:row['phone']||row['Телефон']||'',insta:row['insta']||row['Instagram']||'',tg:row['tg']||row['Telegram']||'',email:row['email']||row['Email']||'',uni:row['uni']||row['Університет']||'',type:row['type']||row['Тип роботи']||'Інше',subject:row['subject']||row['Предмет']||'',pages:row['pages']||row['Сторінок']||'',deadline:row['deadline']||row['Дедлайн']||'',urgency:row['urgency']||'normal',source:row['source']||row['Джерело']||'',status:'new',executor:row['executor']||row['Виконавець']||'',cost:Number(row['cost']||row['Собівартість'])||0,total:Number(row['total']||row['Сума'])||0,prepay:Number(row['prepay']||row['Передоплата'])||0,payStatus:row['payStatus']||row['Оплата']||'unpaid',notes:row['notes']||row['Нотатки']||'',desc:row['desc']||row['Опис']||''});
         imported++;
       }
       saveOrders(orders);renderList();renderStats();
       toast(`Імпортовано: ${imported}, пропущено: ${skipped}`,'ok');
-    } catch(err){
-      toast('Помилка читання CSV','err');
-    }
+    }catch(err){toast('Помилка читання CSV','err')}
   };
-  reader.readAsText(file,'UTF-8');
-  event.target.value='';
+  reader.readAsText(file,'UTF-8');event.target.value='';
 }
- 
-// ─── KEYBOARD PIN ─────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════
+// KEYBOARD PIN
+// ═══════════════════════════════════════════════════════════
 document.addEventListener('keydown',e=>{
   if(document.getElementById('lock-screen').style.display!=='none'){
-    if(e.key>='0'&&e.key<='9') pinPress(e.key);
-    if(e.key==='Backspace') pinDel();
+    if(e.key>='0'&&e.key<='9')pinPress(e.key);
+    if(e.key==='Backspace')pinDel();
   }
-  if(e.key==='Escape') closeModal();
+  if(e.key==='Escape')closeModal();
 });
- 
-// ─── INIT ─────────────────────────────────────────────────
-initLock();
-renderList();
-renderStats();
 </script>
 </body>
 </html>
